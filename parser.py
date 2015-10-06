@@ -3,8 +3,26 @@ try:
 except ImportError:
     import simplejson as json
 import urllib, cStringIO
+from dateutil.parser import parse
 
 from twitter import Twitter, OAuth, TwitterHTTPError, TwitterStream
+
+#hakee kuvat URL-osoitteiden perusteella
+def imagesFromURL(urls):
+   images = []
+   for url in urls:
+      file = cStringIO.StringIO(urllib.urlopen(URL).read())
+      img = Image.open(file)
+      images.append(img)
+   return images
+
+#paivamaaran parsiminen
+def parseDate(date):
+   return date
+
+
+
+
 
 #Twitter API:n tarvitsemat tiedot
 ACCESS_TOKEN = '3869893516-1jWdaC3do0Dvhyb8TP8C6bvaYPRBMt28ug4aoDW'
@@ -22,30 +40,23 @@ tweets = [] #sisakkainen lista [[kayttaja, teksti, kuvan url tai '']]
 x = 0
 while x < COUNT:
    user = query['statuses'][x]['user']['screen_name']  #tweettaajan kayttajanimi
+   date = query['statuses'][x]['created_at']
    text = query['statuses'][x]['text'] #tweetin teksti (escaped)
    url = ''
-
+   
    try:
      url  = query['statuses'][x]['entities']['media'][0]['media_url'] #tweetissa olevan kuvan url
      #print url
      img_urls.append(url)
-     tweets.append([user,text,url])
+     tweets.append([user,text,date,url])
    except:
-      tweets.append([user,text,""])
+      tweets.append([user,text,date,""])
       x += 1
       continue 
    x += 1
 
-
-print tweets #testi
-print tweets[0][0] #testi. kayttajanimen tulostus
-
-#hakee kuvat URL-osoitteiden perusteella
-def imagesFromURL(urls):
-   images = []
-   for url in urls:
-      file = cStringIO.StringIO(urllib.urlopen(URL).read())
-      img = Image.open(file)
-      images.append(img)
-   return images
+pvm = parseDate(tweets[0][2])
+print pvm
+#print tweets #testi
+#print tweets[0][0] #testi. kayttajanimen tulostus
 
