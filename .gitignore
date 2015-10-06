@@ -1,0 +1,10 @@
+*/archive/
+
+__MACOSX
+.DS_Store
+
+# OS generated files #
+######################
+*/.DS_Store
+.DS_Store
+.DS_Store?
