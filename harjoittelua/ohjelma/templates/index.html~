@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <meta charset="UTF-8">
+            <title>SSM Developers</title>
+    </head>
+    <body>
+<!--        <ul id="navigation">
+        {% for item in navigation %}
+            <li>
+                <a href="{{ item.href }}">{{ item.caption }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+        {{ f_results }}
+-->    </body>
+</html>
