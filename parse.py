@@ -21,13 +21,16 @@ img_urls = []
 
 x = 0
 while x < COUNT:
-   ent =  query['statuses'][x]['entities']
+   user = query['statuses'][x]['user']['screen_name']  #tweettaajan kayttajanimi
+   text = query['statuses'][x]['text'] #tweetin teksti
+   #print user
    try:
-      print ent['media'][0]['media_url']
-      img_urls.append(ent['media'][0]['media_url'])
+     url  = query['statuses'][x]['entities']['media'][0]['media_url'] #tweetissa olevan kuvan url
+     #print url
+     img_urls.append(url)
    except:
       x += 1
-      continue
+      continue 
    x += 1
 
 print len(img_urls) #testi
