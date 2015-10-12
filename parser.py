@@ -3,7 +3,9 @@ try:
 except ImportError:
     import simplejson as json
 import urllib, cStringIO
+import calendar
 from dateutil.parser import parse
+from datetime import datetime,timedelta
 
 from twitter import Twitter, OAuth, TwitterHTTPError, TwitterStream
 
@@ -16,11 +18,18 @@ def imagesFromURL(urls):
       images.append(img)
    return images
 
+#UTC-ajan muuttaminen lokaaliksi ajaksi
+def utc_to_local(utc_time):
+    timestamp = calendar.timegm(utc_time.timetuple())
+    local = datetime.fromtimestamp(timestamp)
+    assert utc_time.resolution >= timedelta(microseconds=1)
+    return local.replace(microsecond=utc_time.microsecond)
+
 #paivamaaran parsiminen
 def parseDate(date):
-   return date
-
-
+   format = '%d.%m %H:%M'
+   ts = datetime.strptime(date,'%a %b %d %H:%M:%S +0000 %Y')
+   return utc_to_local(ts).strftime(format)
 
 
 
@@ -29,7 +38,7 @@ ACCESS_TOKEN = '3869893516-1jWdaC3do0Dvhyb8TP8C6bvaYPRBMt28ug4aoDW'
 ACCESS_SECRET = 'IbEu7Q0an9E3T3wzzrYCIRKqy9T370Xnz4HdHFTcrEfWI'
 CONSUMER_KEY = 'kwZuZArqeNhEtP5iFZLbA4tGq'
 CONSUMER_SECRET = 'AxHMUj8Am1Z0bTrjg7OlZmIW6S1iCCbCGJj7esvNwsWOkFCxVM'
-COUNT = 1
+COUNT = 20
 
 oauth = OAuth(ACCESS_TOKEN, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
 twitter = Twitter(auth=oauth)
@@ -57,6 +66,7 @@ while x < COUNT:
 
 pvm = parseDate(tweets[0][2])
 print pvm
-#print tweets #testi
-#print tweets[0][0] #testi. kayttajanimen tulostus
+#print tweets
+#print url #testi
+print tweets[0][0] #testi. kayttajanimen tulostus
 
