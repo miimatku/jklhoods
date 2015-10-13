@@ -6,7 +6,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html', tweets=testi.twiits(), testimuuttuja='testi2')
+    return render_template('index.html', tweets=tweet.twiits(), 
+testimuuttuja='testi2')
 @app.route('/twitter')
 def twitter():
     return 'Twitter is here'
