@@ -1,11 +1,12 @@
 from flask import Flask
 from flask import render_template
 from jinja2 import Template
+import testi
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html', testimuuttuja='Testi')
+    return render_template('index.html', tweets=testi.twiits(), testimuuttuja='testi2')
 @app.route('/twitter')
 def twitter():
     return 'Twitter is here'

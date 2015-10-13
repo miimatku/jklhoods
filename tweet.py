@@ -1,10 +1,14 @@
+from flask import Flask
+from flask import render_template
+from jinja2 import Template
+app = Flask(__name__)
+
 try:
     import json
 except ImportError:
     import simplejson as json
 import urllib, cStringIO
 import calendar
-from dateutil.parser import parse
 from datetime import datetime,timedelta
 
 from twitter import Twitter, OAuth, TwitterHTTPError, TwitterStream
@@ -43,30 +47,24 @@ COUNT = 20
 oauth = OAuth(ACCESS_TOKEN, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
 twitter = Twitter(auth=oauth)
 query = twitter.search.tweets(q='#jyvaeskylae', result_type='recent', count=COUNT)
-
-img_urls = []
-tweets = [] #sisakkainen lista [[kayttaja, teksti, kuvan url tai '']]
-x = 0
-while x < COUNT:
-   user = query['statuses'][x]['user']['screen_name']  #tweettaajan kayttajanimi
-   date = query['statuses'][x]['created_at']
-   text = query['statuses'][x]['text'] #tweetin teksti (escaped)
-   url = ''
+def twiits():
+    tweets = [] #sisakkainen lista [[kayttaja, teksti, kuvan url tai '']]
+    x = 0
+    while x < COUNT:
+        user = query['statuses'][x]['user']['screen_name']  #tweettaajan kayttajanimi
+        date = query['statuses'][x]['created_at']
+        text = query['statuses'][x]['text'] #tweetin teksti (escaped)
+        url = ''
    
-   try:
-     url  = query['statuses'][x]['entities']['media'][0]['media_url'] #tweetissa olevan kuvan url
-     #print url
-     img_urls.append(url)
-     tweets.append([user,text,date,url])
-   except:
-      tweets.append([user,text,date,""])
-      x += 1
-      continue 
-   x += 1
+        try:
+            url  = query['statuses'][x]['entities']['media'][0]['media_url'] #tweetissa olevan kuvan url
+            tweets.append([user,text,date,url])
+        except:
+            tweets.append([user,text,date,""])
+            x += 1
+            continue 
+        x += 1
 
-pvm = parseDate(tweets[0][2])
-print pvm
-#print tweets
-#print url #testi
-print tweets[0][0] #testi. kayttajanimen tulostus
+        pvm = parseDate(tweets[0][2])
+    return tweets
 
