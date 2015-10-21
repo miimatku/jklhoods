@@ -1,22 +1,43 @@
 <!DOCTYPE html>
 <html>
-    <head>
-            <meta charset="UTF-8">
-            <title>SSM Developers</title>
-    	    <link rel="stylesheet" href="main.css">
-    </head>
-    <body>
-	<div name="sisalto">
-    	{% for item in tweets %}
-		<div name="update">
-        		<fieldset>
-				<legend>{{ item[0] }}:</legend>
-				<p>{{ item[1] }}</p>
-				<img src="{{ item[3] }}" style="width:124px;height:124px;" alt="Kuvaa ei ole">
-			</fieldset>
-		</div>
-    	{% endfor %}
-	</div>
-	{{ testimuuttuja }}
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <title>SSM Developers</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+    <div class="div_main">
+        <nav>
+            <a href="">kissa</a>
+            <a href="">koira</a>
+            <a href="">kana</a>
+        </nav>
+        <div class="div_lohko div_twitter" name="sisalto">
+            <h2>Twitter</h2>
+            {% for item in tweets %}
+            <div name="update">
+                <fieldset>
+                    <legend>{{ item[0] }}:</legend>
+                    <p>{{ item[1] }}</p>
+                    <img src="{{ item[3] }}" alt="Kuvaa ei ole">
+                </fieldset>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="div_lohko">
+            <h2>Instagram</h2>
+            {% for item in tweets %}
+            <div name="update">
+                <fieldset>
+                    <legend>{{ item[0] }}:</legend>
+                    <p>{{ item[1] }}</p>
+                    <img src="{{ item[3] }}" alt="Kuvaa ei ole">
+                </fieldset>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- {{ testimuuttuja }} -->
+    </div>
+</body>
 </html>
