@@ -28,7 +28,7 @@ app = Flask(__name__)
 def index():
    lista = getImageURLs()
    #str-funktiolla toimii
-   return str(api.list_subscriptions())
+   return str(api)
 
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
