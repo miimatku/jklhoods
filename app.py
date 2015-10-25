@@ -1,10 +1,8 @@
 from flask import Flask,request, Response
 from instagram import client, subscriptions
 from twisted.internet import reactor
-try:
-    import json
-except ImportError:
-    import simplejson as json
+import simplejson as json
+from django.http import HttpResponse
 
 CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
 CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
@@ -58,7 +56,7 @@ def import_instagram_rt(request, slug):
         raw_response = request.raw_post_data
         data = simplejson.loads(raw_response)
         for update in data:
-            fetch_data(slug, update["object_id"])   
+            parse_update(update)   
    
 
    
