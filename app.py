@@ -1,5 +1,6 @@
 from flask import Flask
 from instagram import client, subscriptions
+from twisted.internet import reactor
 
 CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
 CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
@@ -34,12 +35,12 @@ def callback():
        return Response(challenge)
    else:
        reactor = subscriptions.SubscriptionsReactor()
-       reactor.register_callback(subscriptions.SubscriptionType.USER, parse_update)
+       reactor.register_callback(subscriptions.SubscriptionType.TAG, parse_update)
 
        x_hub_signature = request.headers.get('X-Hub-Signature')
        raw_response    = request.data
        try:
-           reactor.process(INSTAGRAM_SECRET, raw_response, x_hub_signature)
+           reactor.process(CLIENT_SECRET, raw_response, x_hub_signature)
        except subscriptions.SubscriptionVerifyError:
            logging.error('Instagram signature mismatch')
    return Response('Parsed instagram')
@@ -52,6 +53,7 @@ def parse_update(update):
 
 if __name__ == '__main__':
    app.run()
+   reactor.run()
    subscribeToTag("jyvaeskylae")
    
    
