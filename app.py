@@ -1,6 +1,10 @@
-from flask import Flask
+from flask import Flask,request
 from instagram import client, subscriptions
 from twisted.internet import reactor
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
 CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
@@ -55,7 +59,7 @@ def callback():
    """
 
 if __name__ == '__main__':
-   app.run()
+   app.run(debug=True)
    reactor.run()
    subscribeToTag("jyvaeskylae")
    
