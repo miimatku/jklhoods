@@ -15,6 +15,10 @@ def getImageURLs():
 def subscribeToTag(wanted_tag):
    api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
    sub = api.create_subscription(object='tag', object_id=wanted_tag, aspect='media', callback_url='https://shielded-wave-4959.herokuapp.com/callback')
+   
+def parse_update(update):
+   instagram_userid = update['object_id']
+   return str(instagram_userid)
 
 app = Flask(__name__)
 
@@ -22,15 +26,18 @@ app = Flask(__name__)
 def index():
    lista = getImageURLs()
    #str-funktiolla toimii
-   return str(lista[0])
+   return "asda"
 
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
 @app.route('/callback')
 def callback():
+   return "asd"
+   """
    mode         = request.values.get('hub.mode')
    challenge    = request.values.get('hub.challenge')
    verify_token = request.values.get('hub.verify_token')
+   
    if challenge: 
        return Response(challenge)
    else:
@@ -44,16 +51,11 @@ def callback():
        except subscriptions.SubscriptionVerifyError:
            logging.error('Instagram signature mismatch')
    return Response('Parsed instagram')
-   
-   
-
-def parse_update(update):
-   instagram_userid = update['object_id']
-   return str(instagram_userid)
+   """
 
 if __name__ == '__main__':
    app.run()
-   reactor.run()
-   subscribeToTag("jyvaeskylae")
+   #reactor.run()
+   #subscribeToTag("jyvaeskylae")
    
    
