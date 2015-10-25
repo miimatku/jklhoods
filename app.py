@@ -5,15 +5,16 @@ from twisted.internet import reactor
 CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
 CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
 ACCESS_TOKEN='1442727277.1677ed0.ed44f2c97aa24fd1a559e80dbef8d6a0'
+COUNT = 1
 
+
+api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
 
 def getImageURLs():
-   api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
-   popular_media = api.media_popular(count=20)
+   popular_media = api.media_popular(count=COUNT)
    return popular_media
 
 def subscribeToTag(wanted_tag):
-   api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
    sub = api.create_subscription(object='tag', object_id=wanted_tag, aspect='media', callback_url='https://shielded-wave-4959.herokuapp.com/callback')
    
    
@@ -27,7 +28,7 @@ app = Flask(__name__)
 def index():
    lista = getImageURLs()
    #str-funktiolla toimii
-   return str(lista[0])
+   return str(api.list_subscriptions())
 
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
