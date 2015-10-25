@@ -32,13 +32,12 @@ def index():
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
 @app.route('/callback')
-def callback():
-   return "asd"
-   """
+def callback():  
    mode         = request.values.get('hub.mode')
    challenge    = request.values.get('hub.challenge')
    verify_token = request.values.get('hub.verify_token')
-   
+   return "asd"
+   """
    if challenge: 
        return Response(challenge)
    else:
