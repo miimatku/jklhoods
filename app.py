@@ -1,5 +1,5 @@
 from flask import Flask
-from instagram import client
+from instagram import client, subscriptions
 
 CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
 CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
@@ -10,25 +10,48 @@ def getImageURLs():
    api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
    popular_media = api.media_popular(count=20)
    return popular_media
-   
-def subscribe():
-   api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
-   sub = api.create_subscription(object='tag', object_id='jyvaeskylae', aspect='media', callback_url='https://shielded-wave-4959.herokuapp.com/callback')
 
-#subscribe()
+def subscribeToTag(wanted_tag):
+   api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
+   sub = api.create_subscription(object='tag', object_id=wanted_tag, aspect='media', callback_url='https://shielded-wave-4959.herokuapp.com/callback')
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-   return getImageURLs()
+   lista = getImageURLs()
+   #str-funktiolla toimii
+   return str(lista[0])
 
+
+#kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
 @app.route('/callback')
 def callback():
-   return 'kissa'
+   mode         = request.values.get('hub.mode')
+   challenge    = request.values.get('hub.challenge')
+   verify_token = request.values.get('hub.verify_token')
+   if challenge: 
+       return Response(challenge)
+   else:
+       reactor = subscriptions.SubscriptionsReactor()
+       reactor.register_callback(subscriptions.SubscriptionType.USER, parse_update)
 
+       x_hub_signature = request.headers.get('X-Hub-Signature')
+       raw_response    = request.data
+       try:
+           reactor.process(INSTAGRAM_SECRET, raw_response, x_hub_signature)
+       except subscriptions.SubscriptionVerifyError:
+           logging.error('Instagram signature mismatch')
+   return Response('Parsed instagram')
    
+   
+
+def parse_update(update):
+   instagram_userid = update['object_id']
+   return str(instagram_userid)
+
 if __name__ == '__main__':
    app.run()
+   subscribeToTag("jyvaeskylae")
    
    
