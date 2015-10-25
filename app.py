@@ -1,4 +1,4 @@
-from flask import Flask,request
+from flask import Flask,request, Response
 from instagram import client, subscriptions
 from twisted.internet import reactor
 try:
@@ -42,7 +42,7 @@ def callback():
    challenge    = request.values.get('hub.challenge')
    verify_token = request.values.get('hub.verify_token')
    return str(mode) + "   " + str(challenge) + "   " + str(verify_token)
-   """
+   
    if challenge: 
        return Response(challenge)
    else:
@@ -56,7 +56,7 @@ def callback():
        except subscriptions.SubscriptionVerifyError:
            logging.error('Instagram signature mismatch')
    return Response('Parsed instagram')
-   """
+   
 
 if __name__ == '__main__':
    app.run(debug=True)
