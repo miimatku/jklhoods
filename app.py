@@ -24,7 +24,8 @@ def index():
    return getImageURLs()
 
 @app.route('/callback')
-return 'kissa'
+def callback():
+   return 'kissa'
 
    
 if __name__ == '__main__':
