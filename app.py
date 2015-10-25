@@ -16,6 +16,7 @@ def subscribeToTag(wanted_tag):
    api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
    sub = api.create_subscription(object='tag', object_id=wanted_tag, aspect='media', callback_url='https://shielded-wave-4959.herokuapp.com/callback')
    
+   
 def parse_update(update):
    instagram_userid = update['object_id']
    return str(instagram_userid)
@@ -26,7 +27,7 @@ app = Flask(__name__)
 def index():
    lista = getImageURLs()
    #str-funktiolla toimii
-   return "asda"
+   return str(lista[0])
 
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
@@ -55,7 +56,7 @@ def callback():
 
 if __name__ == '__main__':
    app.run()
-   #reactor.run()
-   #subscribeToTag("jyvaeskylae")
+   reactor.run()
+   subscribeToTag("jyvaeskylae")
    
    
