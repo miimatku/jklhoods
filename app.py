@@ -9,6 +9,8 @@ CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
 CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
 ACCESS_TOKEN='1442727277.5b9e1e6.71468fed77d14c4fb1d3a41b2644d4de'
 COUNT = 1
+CALLBACK_HEROKU
+CALLBACK_LOCAL = 'http://127.0.0.1:5000/callback'
 
 app = Flask(__name__)
 
@@ -31,12 +33,13 @@ def getImageURLs():
 
 
 
-@app.route('/callback', methods=['GET','POST'])
-def index(): 
+@app.route('/', methods=['GET','POST'])
+def index():  
    lista = getImageURLs()
    #str-funktiolla toimii
    #global sub
-   return str(lista[0])
+   return str(lista[0]) + str(sub)
+   
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
 @app.route('/callback3', methods=['POST','GET'])
@@ -59,14 +62,16 @@ def sub_callback(request, slug):
             parse_update(update)   
 	
    
-@app.route('/callback5', methods=['POST','GET'])
+@app.route('/callback', methods=['POST','GET'])
 def kokeilu(request, slug):
-    if request.method == "GET":
-       challenge    = request.values.get('hub.challenge')
-       return Response(challenge)
-    else:
-	   return "asd"
+   code = request.args.get('hub.challenge')
+   if code:
+      return code
+   else:
+      return 'asd'
    
+
+
    
    
 #reactor versio
