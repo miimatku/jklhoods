@@ -45,7 +45,7 @@ def index():
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
 @app.route('/callback', methods=['POST','GET'])
 def sub_callback(request, slug):
-     if request.method == "GET":
+    if request.method == "GET":
         mode = request.GET.get("hub.mode")
         challenge = request.GET.get("hub.challenge")
         verify_token = request.GET.get("hub.verify_token")
