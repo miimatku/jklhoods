@@ -9,6 +9,8 @@ CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
 CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
 ACCESS_TOKEN='1442727277.5b9e1e6.71468fed77d14c4fb1d3a41b2644d4de'
 COUNT = 1
+sub = None
+
 
 
 api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
@@ -36,14 +38,14 @@ app = Flask(__name__)
 def index():
    lista = getImageURLs()
    #str-funktiolla toimii
-   return str(lista[0])
+   global sub
+   return str(lista[0]) + str(sub)
 
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
 @app.route('/callback', methods=['POST','GET'])
 def sub_callback(request, slug):
-    return request.data
-    """ if request.method == "GET":
+     if request.method == "GET":
         mode = request.GET.get("hub.mode")
         challenge = request.GET.get("hub.challenge")
         verify_token = request.GET.get("hub.verify_token")
@@ -59,12 +61,12 @@ def sub_callback(request, slug):
         data = simplejson.loads(raw_response)
         for update in data:
             parse_update(update)   
-	"""
+	
    
 
    
 #reactor versio
-@app.route('/callback2')
+@app.route('/callback2', methods=['POST','GET'])
 def callback2():  
    mode         = request.values.get('hub.mode')
    challenge    = request.values.get('hub.challenge')
@@ -90,6 +92,7 @@ def callback2():
 if __name__ == '__main__':
    app.run(debug=True)
    #reactor.run()
-   sub = subscribeToTag("jyvaeskylae") 
+   global sub
+   sub = subscribeToTag("swag") 
    print str(sub)
    
