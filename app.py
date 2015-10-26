@@ -87,7 +87,7 @@ def kokeilu(request):
    
 
 #reactor versio
-@app.route('/callback2', methods=['POST','GET'])
+@app.route('/callback', methods=['POST','GET'])
 def callback():  
    mode         = request.values.get('hub.mode')
    challenge    = request.values.get('hub.challenge')
