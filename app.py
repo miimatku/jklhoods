@@ -39,7 +39,7 @@ def index():
 
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
-@app.route('/callback')
+@app.route('/callback', methods=['POST','GET'])
 def import_instagram_rt(request, slug):
     if request.method == "GET":
         mode = request.GET.get("hub.mode")
@@ -86,7 +86,7 @@ def callback2():
 
 if __name__ == '__main__':
    app.run(debug=True)
-   reactor.run()
-   subscribeToTag("jyvaeskylae")
-   
+   #reactor.run()
+   sub = subscribeToTag("jyvaeskylae") 
+   print str(sub)
    
