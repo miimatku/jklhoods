@@ -40,10 +40,10 @@ def index():
    #global sub
    return str(lista[0])
    
-
+"""
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
 @app.route('/callback3', methods=['POST','GET'])
-def sub_callback(request, slug):
+def sub_callback(request):
     if request.method == "GET":
         mode = request.GET.get("hub.mode")
         challenge = request.GET.get("hub.challenge")
@@ -60,10 +60,11 @@ def sub_callback(request, slug):
         data = simplejson.loads(raw_response)
         for update in data:
             parse_update(update)   
-	
-   
+"""
+
+"""	
 @app.route('/callback', methods=['POST','GET'])
-def kokeilu(request, slug):
+def kokeilu(request):
    code = request.args.get('hub.challenge')
    mode = request.args.get("hub.mode")
    verify_token = request.args.get("hub.verify_token")
@@ -78,8 +79,7 @@ def kokeilu(request, slug):
            logging.error('Instagram signature mismatch')
 		   pass
    return Response('Parsed instagram')
-	  
-   
+"""
 
 
    
