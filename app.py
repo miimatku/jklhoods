@@ -68,7 +68,7 @@ def kokeilu(request, slug):
     if request.method == "GET":
        challenge    = request.values.get('hub.challenge')
        return Response(challenge)
-	else:
+    else:
 	   return "asd"
    
    
