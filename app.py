@@ -94,6 +94,7 @@ def callback():
    mode         = request.values.get('hub.mode')
    challenge    = request.values.get('hub.challenge')
    verify_token = request.values.get('hub.verify_token')
+   test = test + str(mode) + str(challenge) + str(verify_token)
    raw_response = None
    
    if challenge: 
