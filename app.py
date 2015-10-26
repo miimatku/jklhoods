@@ -64,12 +64,6 @@ def sub_callback(request, slug):
    
 @app.route('/callback', methods=['POST','GET'])
 def kokeilu(request, slug):
-   """code = request.args.get('hub.challenge')
-   if code:
-      return code
-   else:
-      return 'asd'
-   """
    code = request.args.get('hub.challenge')
    mode = request.args.get("hub.mode")
    verify_token = request.args.get("hub.verify_token")
@@ -88,7 +82,7 @@ def kokeilu(request, slug):
 
 
    
-   
+"""  
 #reactor versio
 @app.route('/callback2', methods=['POST','GET'])
 def callback():  
@@ -109,6 +103,7 @@ def callback():
        except subscriptions.SubscriptionVerifyError:
            logging.error('Instagram signature mismatch')
    return Response('Parsed instagram')
+"""
   
 api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
 sub = subscribeToTag('swag') 
