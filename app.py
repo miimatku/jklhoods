@@ -43,7 +43,7 @@ def index():
 
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
-@app.route('/callback', methods=['POST','GET'])
+@app.route('/callback3', methods=['POST','GET'])
 def sub_callback(request, slug):
     if request.method == "GET":
         mode = request.GET.get("hub.mode")
@@ -63,7 +63,13 @@ def sub_callback(request, slug):
             parse_update(update)   
 	
    
-
+@app.route('/callback', methods=['POST','GET'])
+def kokeilu(request, slug):
+    if request.method == "GET":
+       challenge    = request.values.get('hub.challenge')
+       return Response(challenge)
+   
+   
    
 #reactor versio
 @app.route('/callback2', methods=['POST','GET'])
