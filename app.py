@@ -12,6 +12,8 @@ COUNT = 1
 CALLBACK_HEROKU = 'https://shielded-wave-4959.herokuapp.com/callback'
 CALLBACK_LOCAL = 'http://localhost:5000/oauth_callback'
 
+test = ''
+
 
 app = Flask(__name__)
 api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
@@ -27,7 +29,7 @@ def subscribeToTag(topic):
    
 def parse_update(update):
    instagram_userid = update['object_id']
-   print str(instagram_userid)
+   test =  str(instagram_userid)
    
 def getImageURLs():
    popular_media = api.media_popular(count=COUNT)
@@ -106,7 +108,7 @@ def callback():
            reactor.process(CLIENT_SECRET, raw_response, x_hub_signature)
        except subscriptions.SubscriptionVerifyError:
            logging.error('Instagram signature mismatch')
-   return Response(str(raw_response))
+   return Response(str(raw_response) + test)
 
   
 if __name__ == '__main__':
