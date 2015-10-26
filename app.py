@@ -12,16 +12,18 @@ COUNT = 1
 CALLBACK_HEROKU = 'https://shielded-wave-4959.herokuapp.com/callback'
 CALLBACK_LOCAL = 'http://localhost:5000/oauth_callback'
 
+
 app = Flask(__name__)
 
 def subscribeToTag(topic):
+   api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
    r = api.create_subscription(object = 'tag',
                             object_id = topic,
                             aspect = 'media',
                             callback_url = CALLBACK_HEROKU,
                             client_id = CLIENT_ID,
-                            client_secret = CLIENT_SECRET
-)
+                            client_secret = CLIENT_SECRET)
+							
    
 def parse_update(update):
    instagram_userid = update['object_id']
@@ -83,7 +85,7 @@ def kokeilu(request):
 
 
    
-"""  
+
 #reactor versio
 @app.route('/callback2', methods=['POST','GET'])
 def callback():  
@@ -104,11 +106,9 @@ def callback():
        except subscriptions.SubscriptionVerifyError:
            logging.error('Instagram signature mismatch')
    return Response('Parsed instagram')
-"""
-  
-api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
-sub = subscribeToTag('swag') 
+
   
 if __name__ == '__main__':
    app.run(debug=True)
-   #reactor.run()
+   sub = subscribeToTag('swag') 
+   reactor.run()
