@@ -37,14 +37,12 @@ def index():
    lista = getImageURLs()
    #str-funktiolla toimii
    return str(lista[0])
-   print str(lista[0])
-   sys.stdout.flush()
 
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
 @app.route('/callback', methods=['POST','GET'])
 def import_instagram_rt(request, slug):
-    if request.method == "GET":
+    """if request.method == "GET":
         mode = request.GET.get("hub.mode")
         challenge = request.GET.get("hub.challenge")
         verify_token = request.GET.get("hub.verify_token")
@@ -60,6 +58,8 @@ def import_instagram_rt(request, slug):
         data = simplejson.loads(raw_response)
         for update in data:
             parse_update(update)   
+	"""
+	return request.data
    
 
    
