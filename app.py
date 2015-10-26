@@ -14,9 +14,9 @@ CALLBACK_LOCAL = 'http://localhost:5000/oauth_callback'
 
 
 app = Flask(__name__)
+api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
 
 def subscribeToTag(topic):
-   api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
    r = api.create_subscription(object = 'tag',
                             object_id = topic,
                             aspect = 'media',
