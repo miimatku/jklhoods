@@ -11,14 +11,6 @@ ACCESS_TOKEN='1442727277.5b9e1e6.71468fed77d14c4fb1d3a41b2644d4de'
 COUNT = 1
 
 
-app = Flask(__name__)
-api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
-sub = subscribeToTag('swag')
-
-def getImageURLs():
-   popular_media = api.media_popular(count=COUNT)
-   return popular_media
-
 def subscribeToTag(topic):
    r = api.create_subscription(object = 'tag',
                             object_id = topic,
@@ -31,6 +23,16 @@ def subscribeToTag(topic):
 def parse_update(update):
    instagram_userid = update['object_id']
    print str(instagram_userid)
+   
+def getImageURLs():
+   popular_media = api.media_popular(count=COUNT)
+   return popular_media
+
+
+
+app = Flask(__name__)
+api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
+sub = subscribeToTag('swag')
 
 
 @app.route('/')
