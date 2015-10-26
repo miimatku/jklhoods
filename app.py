@@ -31,7 +31,7 @@ def getImageURLs():
 
 
 
-@app.route('callback/', methods=['GET','POST'])
+@app.route('/callback', methods=['GET','POST'])
 def index():
    code = request.args.get('hub.challenge')
    if code:
