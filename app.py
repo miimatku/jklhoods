@@ -18,7 +18,7 @@ def subscribeToTag(topic):
    r = api.create_subscription(object = 'tag',
                             object_id = topic,
                             aspect = 'media',
-                            callback_url = CALLBACK_LOCAL,
+                            callback_url = CALLBACK_HEROKU,
                             client_id = CLIENT_ID,
                             client_secret = CLIENT_SECRET
 )
