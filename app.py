@@ -92,6 +92,7 @@ def callback():
    mode         = request.values.get('hub.mode')
    challenge    = request.values.get('hub.challenge')
    verify_token = request.values.get('hub.verify_token')
+   raw_response = None
    
    if challenge: 
        return Response(challenge)
@@ -105,7 +106,7 @@ def callback():
            reactor.process(CLIENT_SECRET, raw_response, x_hub_signature)
        except subscriptions.SubscriptionVerifyError:
            logging.error('Instagram signature mismatch')
-   return Response('Parsed instagram')
+   return raw_response
 
   
 if __name__ == '__main__':
