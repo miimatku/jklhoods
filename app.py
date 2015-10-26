@@ -3,7 +3,7 @@ from instagram import client, subscriptions
 from twisted.internet import reactor
 import simplejson as json
 from django.http import HttpResponse
-import sys
+import sys, logging
 
 CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
 CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
@@ -38,7 +38,7 @@ def index():
    lista = getImageURLs()
    #str-funktiolla toimii
    #global sub
-   return str(lista[0]) + str(sub)
+   return str(lista[0])
    
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
@@ -64,11 +64,26 @@ def sub_callback(request, slug):
    
 @app.route('/callback', methods=['POST','GET'])
 def kokeilu(request, slug):
-   code = request.args.get('hub.challenge')
+   """code = request.args.get('hub.challenge')
    if code:
       return code
    else:
       return 'asd'
+   """
+   code = request.args.get('hub.challenge')
+   mode = request.args.get("hub.mode")
+   verify_token = request.args.get("hub.verify_token")
+   if code:
+      return Response(code)
+   else:
+      x_hub_signature = request.headers.get('X-Hub-Signature')
+	  raw_response    = request.data
+	  try:
+           parse_update(simplejson.loads(raw_response)
+      except Exception e:
+	       logging.error('Instagram signature mismatch')
+   return Response('Parsed instagram')
+	  
    
 
 
@@ -76,7 +91,7 @@ def kokeilu(request, slug):
    
 #reactor versio
 @app.route('/callback2', methods=['POST','GET'])
-def callback2():  
+def callback():  
    mode         = request.values.get('hub.mode')
    challenge    = request.values.get('hub.challenge')
    verify_token = request.values.get('hub.verify_token')
