@@ -30,12 +30,7 @@ def getImageURLs():
 
 
 
-app = Flask(__name__)
-api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
-sub = subscribeToTag('swag')
-
-
-@app.route('/')
+@app.route('/'methods=['GET','POST'])
 def index():
    code = request.args.get('hub.challenge')
    if code:
@@ -48,8 +43,6 @@ def index():
    #global sub
    #return str(lista[0]) + str(sub)
    
-   
-
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
 @app.route('/callback3', methods=['POST','GET'])
@@ -102,11 +95,11 @@ def callback2():
        except subscriptions.SubscriptionVerifyError:
            logging.error('Instagram signature mismatch')
    return Response('Parsed instagram')
-
-
-   
-
+  
+app = Flask(__name__)
+api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
+sub = subscribeToTag('swag') 
+  
 if __name__ == '__main__':
    app.run(debug=True)
    #reactor.run()
-   
