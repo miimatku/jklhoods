@@ -10,6 +10,7 @@ CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
 ACCESS_TOKEN='1442727277.5b9e1e6.71468fed77d14c4fb1d3a41b2644d4de'
 COUNT = 1
 
+app = Flask(__name__)
 
 def subscribeToTag(topic):
    r = api.create_subscription(object = 'tag',
@@ -96,7 +97,6 @@ def callback2():
            logging.error('Instagram signature mismatch')
    return Response('Parsed instagram')
   
-app = Flask(__name__)
 api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
 sub = subscribeToTag('swag') 
   
