@@ -106,7 +106,7 @@ def callback():
            reactor.process(CLIENT_SECRET, raw_response, x_hub_signature)
        except subscriptions.SubscriptionVerifyError:
            logging.error('Instagram signature mismatch')
-   return str(raw_response)
+   return Response(str(raw_response))
 
   
 if __name__ == '__main__':
