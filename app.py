@@ -41,8 +41,9 @@ def index():
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
 @app.route('/callback', methods=['POST','GET'])
-def import_instagram_rt(request, slug):
-    """if request.method == "GET":
+def sub_callback(request, slug):
+    return request.data
+    """ if request.method == "GET":
         mode = request.GET.get("hub.mode")
         challenge = request.GET.get("hub.challenge")
         verify_token = request.GET.get("hub.verify_token")
@@ -59,7 +60,6 @@ def import_instagram_rt(request, slug):
         for update in data:
             parse_update(update)   
 	"""
-	return request.data
    
 
    
