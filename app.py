@@ -30,7 +30,7 @@ def getImageURLs():
 
 
 
-@app.route('/'methods=['GET','POST'])
+@app.route('/', methods=['GET','POST'])
 def index():
    code = request.args.get('hub.challenge')
    if code:
