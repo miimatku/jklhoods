@@ -68,6 +68,8 @@ def kokeilu(request, slug):
     if request.method == "GET":
        challenge    = request.values.get('hub.challenge')
        return Response(challenge)
+	else:
+	   return "asd"
    
    
    
@@ -96,9 +98,9 @@ def callback2():
    
 
 if __name__ == '__main__':
-   app.run(debug=True)
-   #reactor.run()
    global sub
    sub = subscribeToTag("swag") 
+   app.run(debug=True)
+   #reactor.run()
    print str(sub)
    
