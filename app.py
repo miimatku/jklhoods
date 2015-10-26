@@ -9,11 +9,11 @@ CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
 CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
 ACCESS_TOKEN='1442727277.5b9e1e6.71468fed77d14c4fb1d3a41b2644d4de'
 COUNT = 1
-sub = None
 
 
-
+app = Flask(__name__)
 api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN)
+sub = subscribeToTag('swag')
 
 def getImageURLs():
    popular_media = api.media_popular(count=COUNT)
@@ -32,14 +32,21 @@ def parse_update(update):
    instagram_userid = update['object_id']
    print str(instagram_userid)
 
-app = Flask(__name__)
 
 @app.route('/')
 def index():
-   lista = getImageURLs()
+   code = request.args.get('hub.challenge')
+   if code:
+      return code
+   else:
+      return 'asd'
+  
+   #lista = getImageURLs()
    #str-funktiolla toimii
-   global sub
-   return str(lista[0]) + str(sub)
+   #global sub
+   #return str(lista[0]) + str(sub)
+   
+   
 
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
@@ -98,9 +105,6 @@ def callback2():
    
 
 if __name__ == '__main__':
-   global sub
-   sub = subscribeToTag("swag") 
    app.run(debug=True)
    #reactor.run()
-   print str(sub)
    
