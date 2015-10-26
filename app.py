@@ -31,7 +31,7 @@ def getImageURLs():
 
 
 
-@app.route('/', methods=['GET','POST'])
+@app.route('callback/', methods=['GET','POST'])
 def index():
    code = request.args.get('hub.challenge')
    if code:
@@ -66,7 +66,7 @@ def sub_callback(request, slug):
             parse_update(update)   
 	
    
-@app.route('/callback', methods=['POST','GET'])
+@app.route('/callback5', methods=['POST','GET'])
 def kokeilu(request, slug):
     if request.method == "GET":
        challenge    = request.values.get('hub.challenge')
