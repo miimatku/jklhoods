@@ -74,7 +74,7 @@ def kokeilu(request, slug):
       raw_response = request.data
       try:
            parse_update(simplejson.loads(raw_response)
-      except Exception e:
+      except:
            logging.error('Instagram signature mismatch')
    return Response('Parsed instagram')
 	  
