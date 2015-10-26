@@ -3,6 +3,7 @@ from instagram import client, subscriptions
 from twisted.internet import reactor
 import simplejson as json
 from django.http import HttpResponse
+import sys
 
 CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
 CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
@@ -35,7 +36,9 @@ app = Flask(__name__)
 def index():
    lista = getImageURLs()
    #str-funktiolla toimii
-   return str(api.list_subscriptions())
+   return str(lista[0])
+   print str(lista[0])
+   sys.stdout.flush()
 
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
