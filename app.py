@@ -29,8 +29,8 @@ def setup_request():
 def process_tag_update(update):
     print str(update)
 
-api = client.InstagramAPI(**CONFIG)
-api.create_subscription(object='tag', object_id='paris', aspect='media', callback_url='https://shielded-wave-4959.herokuapp.com/callback')
+#api = client.InstagramAPI(**CONFIG)
+#api.create_subscription(object='tag', object_id='paris', aspect='media', callback_url='https://shielded-wave-4959.herokuapp.com/callback')
 reactor = subscriptions.SubscriptionsReactor()
 reactor.register_callback(subscriptions.SubscriptionType.TAG, process_tag_update)
 
