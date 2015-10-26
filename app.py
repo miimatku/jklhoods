@@ -71,11 +71,11 @@ def kokeilu(request, slug):
       return Response(code)
    else:
       x_hub_signature = request.headers.get('X-Hub-Signature')
-	  raw_response = request.data
-	  try:
+      raw_response = request.data
+      try:
            parse_update(simplejson.loads(raw_response)
       except Exception e:
-	       logging.error('Instagram signature mismatch')
+           logging.error('Instagram signature mismatch')
    return Response('Parsed instagram')
 	  
    
