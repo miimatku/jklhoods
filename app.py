@@ -32,18 +32,11 @@ def getImageURLs():
 
 
 @app.route('/callback', methods=['GET','POST'])
-def index():
-   code = request.args.get('hub.challenge')
-   if code:
-      return code
-   else:
-      return 'asd'
-  
-   #lista = getImageURLs()
+def index(): 
+   lista = getImageURLs()
    #str-funktiolla toimii
    #global sub
-   #return str(lista[0]) + str(sub)
-   
+   return str(lista[0])
 
 #kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
 @app.route('/callback3', methods=['POST','GET'])
