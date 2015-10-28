@@ -2,8 +2,7 @@
 from flask import Flask,request, Response,redirect,url_for
 from instagram import client, subscriptions
 from twisted.internet import reactor
-import simplejson
-from django.http import HttpResponse
+import json
 import sys, logging
 import time
 from multiprocessing import Process
@@ -16,14 +15,18 @@ CALLBACK_HEROKU = 'https://shielded-wave-4959.herokuapp.com/callback'
 CALLBACK_LOCAL = 'http://localhost:5000/oauth_callback'
 CALLBACK_TUNNEL = 'https://nzmpqlpmhe.localtunnel.me/realtime' #lt --port 8000 --subdomain nzmpqlpmhe
 
-f1=open('./testfile', 'a')
+f1=open('./testfile.txt', 'a')
+tag = 'swag'
 
-idListing = ['asd']
+idListing = []
 test = ''
+lista = []
+reactor = None
 
 app = Flask(__name__)
 
 def subscribeToTag(topic):
+   print CLIENT_SECRET
    r = api.create_subscription(object = 'tag',
                             object_id = topic,
                             aspect = 'media',
@@ -33,8 +36,8 @@ def subscribeToTag(topic):
 							
    
 def parse_update(update):
-   instagram_userid = update['object_id']
-   id =  str(instagram_userid)
+   #instagram_userid = update['object_id']
+   #id =  str(instagram_userid)
    lista.append('asda')
    return redirect(url_for('showInstagram'))
    
@@ -51,41 +54,27 @@ def showInstagram():
 
 @app.route('/', methods=['GET','POST'])
 def index():
-   #subscribeToTag('swag') 
-   print 'ad'
    lista = getImageURLs()
    #str-funktiolla toimii
    #global sub
    return str(lista[0])
-   
-   
+
 """
-@app.before_first_request
-def _run_on_start():
-   subscribeToTag('swag') 
+#hakee uuden paivityksen ID:n
+def fetchNewUpdate(count=1):
+  global tag
+  global idListing
+  #tag_search,next_tag = api.tag.search(q=tag)
+  tagged_media, next_ = api.tag_recent_media(tag_name=tag)
+  for media in tagged_media:
+     id = media.id
+     img_url= media.images['standard_resolution'].url
+     print >> f1, media
+     idListing.append(img_url)
+  return idListing
 """
-   
-"""
-#kutsutaan, kun uutta jyvaskyla-tagilla merkittya instagram-postia tulee
-@app.route('/callback3', methods=['POST','GET'])
-def sub_callback(request):
-    if request.method == "GET":
-        mode = request.GET.get("hub.mode")
-        challenge = request.GET.get("hub.challenge")
-        verify_token = request.GET.get("hub.verify_token")
-        if challenge:
-            return HttpResponse(challenge, mimetype='text/html')
-        else:
-            return HttpResponse("test", mimetype='text/html')
-    else:
-        x_hub_signature=''
-        if request.META.has_key('HTTP_X_HUB_SIGNATURE'):
-            x_hub_signature = request.META['HTTP_X_HUB_SIGNATURE']
-        raw_response = request.raw_post_data
-        data = simplejson.loads(raw_response)
-        for update in data:
-            parse_update(update)   
-"""
+  
+
 
 """	
 @app.route('/callback', methods=['POST','GET'])
@@ -110,46 +99,47 @@ def kokeilu(request):
 #reactor versio
 @app.route('/realtime', methods=['POST','GET'])
 def callback(): 
-   global test
+   global reactor
    if request.method == 'GET':
       mode         = request.values.get('hub.mode')
       challenge    = request.values.get('hub.challenge')
       verify_token = request.values.get('hub.verify_token')
-      print >> f1, mode
-      print >> f1, challenge
-      print >> f1, verify_token
       if challenge:
          return Response(challenge)
    else:
-       reactor = subscriptions.SubscriptionsReactor()
-       reactor.register_callback(subscriptions.SubscriptionType.TAG, parse_update)
-	   
+       #reactor.register_callback(subscriptions.SubscriptionType.TAG, parse_update)
        x_hub_signature = request.headers.get('X-Hub-Signature')
        raw_response    = request.data
-       data = simplejson.loads(raw_response[0])
-       print >> f1, data
+       #if raw_response:
+       # fetchNewUpdate()
+       print raw_response
        try:
-           reactor.process(CLIENT_SECRET, data, x_hub_signature)
+           reactor.process(CLIENT_SECRET, raw_response, x_hub_signature)
        except subscriptions.SubscriptionVerifyError:
            logging.error('Instagram signature mismatch')
-   return Response('SUP') #ei tarvitse vastausta.
+   return Response("") #ei tarvitse vastausta.
 
 api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN) 
 
+#tekee subscription-toiminnon n. 3 sekunnin kuluttua flask-sovelluksen kaynnistyttya
 def doSubscribe():
     print "Subscription process starting"
     time.sleep(3)
     subscribeToTag('swag')
+    #global reactor
+    #reactor = subscriptions.SubscriptionsReactor()
+    #reactor.register_callback(subscriptions.SubscriptionType.TAG, parse_update)
     print 'Subscription process ended'
 	
 def startApp():
     global app
     app.run(debug=True, port=8000)
-	
+
+reactor = subscriptions.SubscriptionsReactor()
 
 if __name__ == '__main__':
    server = Process(target=startApp)
    server.start()
    sub = Process(target=doSubscribe)
    sub.start()
-   #reactor.run()
+
