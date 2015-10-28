@@ -18,32 +18,37 @@ con = sql3.connect("tweets.db")
 cur = con.cursor()
 
 
-class listener(StreamListener):
+class Listener(StreamListener):
 
     def on_data(self, data):
         all_data = json.loads(data)
         
+        id = all_data["id_str"]
+        time = all_data["created_at"]
+        name = all_data["user"]["name"]
+        screen_name = all_data["user"]["screen_name"]
         tweet = all_data["text"]
-        
-        username = all_data["user"]["screen_name"]
-        
-        cur.execute("INSERT INTO taula (time, username, tweet) VALUES (?, ?, ?)",
-            (time.time(), username, tweet))
+
+        cur.execute("INSERT INTO tweets (id, time, username, screen_name, tweet) VALUES (?, ?, ?, ?, ?)",
+            (id, time, name, screen_name, tweet))
 
         con.commit()
 
-        print((username,tweet))
+        print((screen_name, name, time))
         
         return True
 
     def on_error(self, status):
+    	if status == 420:
+    		#returning False in on_data disconnects the stream
+    		return False
         print status
 
 auth = OAuthHandler(ckey, csecret)
 auth.set_access_token(atoken, asecret)
 
-twitterStream = Stream(auth, listener())
-twitterStream.filter(track=["Finland"])
+twitterStream = Stream(auth, Listener())
+twitterStream.filter(track=["swag"])
 
 #def runStream():
 #    auth = OAuthHandler(ckey, csecret)
