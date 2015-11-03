@@ -49,7 +49,7 @@ def getImageURLs():
 @app.route('/showInstagram')
 def showInstagram():
    global idListing
-   return str(len(idListing))
+   return str(idListing)
    
 
 @app.route('/', methods=['GET','POST'])
@@ -59,43 +59,22 @@ def index():
    #global sub
    return str(lista[0])
 
-"""
+
 #hakee uuden paivityksen ID:n
-def fetchNewUpdate(count=1):
+def fetchNewUpdate(amount=1):
   global tag
   global idListing
   #tag_search,next_tag = api.tag.search(q=tag)
-  tagged_media, next_ = api.tag_recent_media(tag_name=tag)
+  tagged_media, next_ = api.tag_recent_media(tag_name=tag, count=amount)
   for media in tagged_media:
      id = media.id
-     img_url= media.images['standard_resolution'].url
-     print >> f1, media
-     idListing.append(img_url)
+     #img_url= media.images['standard_resolution'].url
+     media_link = media.link #linkki paivitykseen
+     shortcode = media_link.split("/")[4]
+     idListing.append(shortcode)
   return idListing
-"""
+
   
-
-
-"""	
-@app.route('/callback', methods=['POST','GET'])
-def kokeilu(request):
-   code = request.args.get('hub.challenge')
-   mode = request.args.get("hub.mode")
-   verify_token = request.args.get("hub.verify_token")
-   if code:
-      return Response(code)
-   else:
-      x_hub_signature = request.headers.get('X-Hub-Signature')
-      raw_response = request.data
-      try:
-           parse_update(simplejson.loads(raw_response)
-      except:
-           logging.error('Instagram signature mismatch')
-		   pass
-   return Response('Parsed instagram')
-"""
-   
-
 #reactor versio
 @app.route('/realtime', methods=['POST','GET'])
 def callback(): 
@@ -110,8 +89,8 @@ def callback():
        #reactor.register_callback(subscriptions.SubscriptionType.TAG, parse_update)
        x_hub_signature = request.headers.get('X-Hub-Signature')
        raw_response    = request.data
-       #if raw_response:
-       # fetchNewUpdate()
+       if raw_response:
+          fetchNewUpdate()
        print raw_response
        try:
            reactor.process(CLIENT_SECRET, raw_response, x_hub_signature)
