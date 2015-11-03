@@ -9,15 +9,20 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- <script type="text/javascript" src="javascriptit.js"></script> -->
+    <script sync src="https://platform.twitter.com/widgets.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='javascriptit.js') }}"></script>
 </head>
 <body>
+    <style>
+ 
+
+</style>
     
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="" >Show all</a>
-                <a class="navbar-brand" href="">Twitter
+                <a class="navbar-brand" href="" role="button" >Show all</a>
+                <a class="navbar-brand" id="show_twitter" href="">Twitter
                   <!-- <img src="{{ url_for('static', filename='TwitterLogo_#55acee.png')}}" alt="Twitter" class="twitter_logo"> -->
                 </a>
                 <a class="navbar-brand" href="">Instagram</a>
@@ -26,21 +31,11 @@
     </nav>
     <div class="container-fluid">
         <div class="row"> 
-            <div class="col-md-6" name="sisalto">
-                            <a class="twitter-timeline"  href="https://twitter.com/hashtag/jyv%C3%A4skyl%C3%A4" data-widget-id="659317235178192896">#jyväskylä Tweets</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-          
-                <!--
-               <h2>Twitter</h2>
-               {% for item in tweets %}
-               <div class="thumbnail">
-                   <!--<fieldset>
-                       <legend>{{ item[0] }}:</legend>
-                       <p>{{ item[1] }}</p>
-                       <img src="{{ item[3] }}" class="img-responsive img-rounded" alt="Kuvaa ei ole">
-                   <!--</fieldset>
-                </div>
-                {% endfor %} -->
+            <div class="col-md-6" name="sisalto" id="div_twitter">
+                <h2>Twitter</h2>
+                {% for item in tweets %}
+                <div class="tweet" tweetID="{{ item[0] }}"></div>
+                {% endfor %}
             </div>
 
             <div class="col-md-6" id="div_insta">
@@ -56,7 +51,7 @@
                 {% endfor %}
             </div>
         </div>
-        <!-- {{ testimuuttuja }} -->
     </div>
+
 </body>
 </html>
