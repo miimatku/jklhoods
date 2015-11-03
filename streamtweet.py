@@ -27,15 +27,20 @@ class Listener(StreamListener):
         time = all_data["created_at"]
         name = all_data["user"]["name"]
         screen_name = all_data["user"]["screen_name"]
-        tweet = all_data["text"]
+        tagit = all_data["entities"]["hashtags"]
 
-        cur.execute("INSERT INTO tweets (id, time, username, screen_name, tweet) VALUES (?, ?, ?, ?, ?)",
-            (id, time, name, screen_name, tweet))
+        cur.execute("INSERT INTO twitter_tweets (id, time, username, screen_name) VALUES (?, ?, ?, ?)",
+            (id, time, name, screen_name))
+
+        for text in tagit:
+        	cur.execute("INSERT INTO twitter_tags (id, hashtag) VALUES (?, ?)",
+        		(id, text["text"]))
+		
 
         con.commit()
 
-        print((screen_name, name, time))
-        
+        print((id ,screen_name))
+        print tagit
         return True
 
     def on_error(self, status):
@@ -48,7 +53,7 @@ auth = OAuthHandler(ckey, csecret)
 auth.set_access_token(atoken, asecret)
 
 twitterStream = Stream(auth, Listener())
-twitterStream.filter(track=["swag"])
+twitterStream.filter(track=["#swag"])
 
 #def runStream():
 #    auth = OAuthHandler(ckey, csecret)
