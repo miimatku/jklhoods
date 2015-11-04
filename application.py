@@ -1,7 +1,6 @@
 from flask import Flask
 from flask import render_template
 from jinja2 import Template
-import tweet
 import twiitit
 app = Flask(__name__)
 

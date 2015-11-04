@@ -6,6 +6,8 @@ window.onload = function(){
 
 function alustus() {
     $("#show_twitter").click(show_twitter);
+    $("#show_insta").click(show_instagram);
+    $("#show_all").click(show_all);
 }
 
 function twitteriStriimi() {
@@ -23,9 +25,31 @@ function twitteriStriimi() {
     }; 
 }
 
+
+//Show all feed
+function show_all(e){
+    e.preventDefault();
+    $("#div_twitter").show();
+    $("#div_insta").show();
+    $("#div_insta").addClass("col-md-6");
+    $("#div_twitter").addClass("col-md-6");
+}
+
+
+//Show only twitter feed
 function show_twitter(e){
 	e.preventDefault();
 	$("#div_insta").hide();
-	$("#div_twitter").removeClass("");
+    $("#div_twitter").show();
+	$("#div_twitter").removeClass("col-md-6");
+}
+
+
+//Show only instagram feed
+function show_instagram(e){
+    e.preventDefault();
+    $("#div_twitter").hide();
+    $("#div_insta").show();
+    $("#div_insta").removeClass("col-md-6")
 }
 
