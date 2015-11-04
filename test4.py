@@ -6,6 +6,8 @@ import json
 import sys, logging
 import time
 from multiprocessing import Process
+import oembedInstagram
+import atexit
 
 CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
 CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
@@ -17,11 +19,23 @@ CALLBACK_TUNNEL = 'https://nzmpqlpmhe.localtunnel.me/realtime' #lt --port 8000 -
 
 f1=open('./testfile.txt', 'a')
 tag = 'swag'
+subID = 0
 
 idListing = []
 test = ''
 lista = []
 reactor = None
+
+"""
+TODO
+susbcription poistaminen suljettaessa ohjelma
+tietokantaan tallennus
+multiprocessingin aiheuttamat virheet pois
+
+
+
+"""
+
 
 app = Flask(__name__)
 
@@ -33,6 +47,8 @@ def subscribeToTag(topic):
                             callback_url = CALLBACK_TUNNEL,
                             client_id = CLIENT_ID,
                             client_secret = CLIENT_SECRET)
+   global subID
+   subID = r['data']['id']
 							
    
 def parse_update(update):
@@ -48,6 +64,7 @@ def getImageURLs():
 
 @app.route('/showInstagram')
 def showInstagram():
+   #stop_subscription()
    global idListing
    return str(idListing)
    
@@ -64,17 +81,25 @@ def index():
 def fetchNewUpdate(amount=1):
   global tag
   global idListing
-  #tag_search,next_tag = api.tag.search(q=tag)
   tagged_media, next_ = api.tag_recent_media(tag_name=tag, count=amount)
   for media in tagged_media:
      id = media.id
-     #img_url= media.images['standard_resolution'].url
+     #user = media.user
+     #timestamp = media.created_time
      media_link = media.link #linkki paivitykseen
      shortcode = media_link.split("/")[4]
-     idListing.append(shortcode)
+     #alla oleva funktio jarkea tehda myohemmin?
+     embed = oembedInstagram.getOEmbed(shortcode)
+     #savetoDataBase()
+     idListing.append("a")
   return idListing
 
-  
+
+def savetoDataBase():
+   #TODO
+   return 
+
+
 #reactor versio
 @app.route('/realtime', methods=['POST','GET'])
 def callback(): 
@@ -86,12 +111,12 @@ def callback():
       if challenge:
          return Response(challenge)
    else:
-       #reactor.register_callback(subscriptions.SubscriptionType.TAG, parse_update)
        x_hub_signature = request.headers.get('X-Hub-Signature')
        raw_response    = request.data
        if raw_response:
           fetchNewUpdate()
        print raw_response
+
        try:
            reactor.process(CLIENT_SECRET, raw_response, x_hub_signature)
        except subscriptions.SubscriptionVerifyError:
@@ -100,25 +125,35 @@ def callback():
 
 api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN) 
 
-#tekee subscription-toiminnon n. 3 sekunnin kuluttua flask-sovelluksen kaynnistyttya
+#tekee subscription-toiminnon n. 5 sekunnin kuluttua flask-sovelluksen kaynnistyttya
 def doSubscribe():
     print "Subscription process starting"
-    time.sleep(3)
-    subscribeToTag('swag')
-    #global reactor
-    #reactor = subscriptions.SubscriptionsReactor()
-    #reactor.register_callback(subscriptions.SubscriptionType.TAG, parse_update)
+    time.sleep(5)
+    global tag
+    subscribeToTag(tag)
     print 'Subscription process ended'
 	
 def startApp():
     global app
     app.run(debug=True, port=8000)
 
-reactor = subscriptions.SubscriptionsReactor()
 
-if __name__ == '__main__':
+def stop_subscription():
+  api.delete_subscriptions(id=subID)
+
+
+reactor = subscriptions.SubscriptionsReactor()
+#atexit.register(stop_subscription) #funktio, joka suoritetaan ohjelman sulkeutuessa
+
+def main():
    server = Process(target=startApp)
    server.start()
    sub = Process(target=doSubscribe)
    sub.start()
+
+if __name__ == '__main__':
+   try:
+        main()
+   except KeyboardInterrupt:
+        raise
 
