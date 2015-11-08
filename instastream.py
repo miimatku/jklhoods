@@ -17,13 +17,9 @@ CALLBACK_HEROKU = 'https://shielded-wave-4959.herokuapp.com/callback'
 CALLBACK_LOCAL = 'http://localhost:5000/oauth_callback'
 CALLBACK_TUNNEL = 'https://nzmpqlpmhe.localtunnel.me/realtime' #lt --port 8000 --subdomain nzmpqlpmhe
 
-f1=open('./testfile.txt', 'a')
 tag = 'swag'
 subID = 0
 
-idListing = []
-test = ''
-lista = []
 reactor = None
 
 """
@@ -40,7 +36,6 @@ multiprocessingin aiheuttamat virheet pois
 app = Flask(__name__)
 
 def subscribeToTag(topic):
-   print CLIENT_SECRET
    r = api.create_subscription(object = 'tag',
                             object_id = topic,
                             aspect = 'media',
@@ -50,53 +45,39 @@ def subscribeToTag(topic):
    global subID
    subID = r['data']['id']
 							
-   
-def parse_update(update):
-   #instagram_userid = update['object_id']
-   #id =  str(instagram_userid)
-   lista.append('asda')
-   return redirect(url_for('showInstagram'))
-   
-def getImageURLs():
-   popular_media = api.media_popular(count=COUNT)
-   return popular_media
-
-
-@app.route('/showInstagram')
-def showInstagram():
-   #stop_subscription()
-   global idListing
-   return str(idListing)
-   
-
+    
 @app.route('/', methods=['GET','POST'])
 def index():
-   lista = getImageURLs()
-   #str-funktiolla toimii
-   #global sub
-   return str(lista[0])
-
+   return 'jotain'
 
 #hakee uuden paivityksen ID:n
 def fetchNewUpdate(amount=1):
   global tag
-  global idListing
   tagged_media, next_ = api.tag_recent_media(tag_name=tag, count=amount)
   for media in tagged_media:
      id = media.id
-     #user = media.user
-     #timestamp = media.created_time
+     user = media.user.username
+     userID = media.user.id
+     timestamp = media.created_time
      media_link = media.link #linkki paivitykseen
      shortcode = media_link.split("/")[4]
+	 
      #alla oleva funktio jarkea tehda myohemmin?
      embed = oembedInstagram.getOEmbed(shortcode)
-     #savetoDataBase()
-     idListing.append("a")
-  return idListing
+	 
+     savetoDataBase(userID,user,timestamp,shortcode)
+  return True
 
 
-def savetoDataBase():
+def savetoDataBase(userID,user,timestamp,shortcode):
    #TODO
+   """
+   try:
+     cur.execute("INSERT INTO instagram_posts (id, user, time, shortcode) VALUES (?, ?, ?, ?)",
+     (userID, user, timestamp, shortcode))
+   except:
+     print 'Error writing to instagram database'
+   """
    return 
 
 
@@ -143,17 +124,10 @@ def stop_subscription():
 
 
 reactor = subscriptions.SubscriptionsReactor()
-#atexit.register(stop_subscription) #funktio, joka suoritetaan ohjelman sulkeutuessa
 
-def main():
+
+if __name__ == '__main__':
    server = Process(target=startApp)
    server.start()
    sub = Process(target=doSubscribe)
    sub.start()
-
-if __name__ == '__main__':
-   try:
-        main()
-   except KeyboardInterrupt:
-        raise
-
