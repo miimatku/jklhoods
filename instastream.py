@@ -5,9 +5,10 @@ from twisted.internet import reactor
 import json
 import sys, logging
 import time
-from multiprocessing import Process
-import oembedInstagram
-import atexit
+#import threading
+import multiprocessing
+import sqlite3 as sql3
+from datetime import datetime
 
 CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
 CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
@@ -21,17 +22,18 @@ tag = 'swag'
 subID = 0
 
 reactor = None
-
 """
 TODO
-susbcription poistaminen suljettaessa ohjelma
+subscription poistaminen suljettaessa ohjelma
 tietokantaan tallennus
 multiprocessingin aiheuttamat virheet pois
 
-
-
 """
 
+
+con = sql3.connect("instagram.db")
+
+cur = con.cursor()
 
 app = Flask(__name__)
 
@@ -55,29 +57,27 @@ def fetchNewUpdate(amount=1):
   global tag
   tagged_media, next_ = api.tag_recent_media(tag_name=tag, count=amount)
   for media in tagged_media:
-     id = media.id
+     #id = media.id
      user = media.user.username
      userID = media.user.id
      timestamp = media.created_time
      media_link = media.link #linkki paivitykseen
      shortcode = media_link.split("/")[4]
 	 
-     #alla oleva funktio jarkea tehda myohemmin?
-     embed = oembedInstagram.getOEmbed(shortcode)
-	 
      savetoDataBase(userID,user,timestamp,shortcode)
   return True
 
 
 def savetoDataBase(userID,user,timestamp,shortcode):
-   #TODO
-   """
+  """
+   print str(userID) + "#" + str(user) + "#" + str(shortcode) + str(timestamp.strftime("%d.%m.%Y %H:%M"))
    try:
-     cur.execute("INSERT INTO instagram_posts (id, user, time, shortcode) VALUES (?, ?, ?, ?)",
-     (userID, user, timestamp, shortcode))
-   except:
-     print 'Error writing to instagram database'
-   """
+     cur.execute("INSERT INTO instagram_posts (id, username, time, shortcode) VALUES (?, ?, ?, ?)",
+     (str(userID), str(user), timestamp.strftime("%d.%m.%Y %H:%M"), str(shortcode)))
+     con.commit()
+   except sql3.Error, e:
+     print "Error &s:" % e.args[0]
+     """
    return 
 
 
@@ -96,8 +96,6 @@ def callback():
        raw_response    = request.data
        if raw_response:
           fetchNewUpdate()
-       print raw_response
-
        try:
            reactor.process(CLIENT_SECRET, raw_response, x_hub_signature)
        except subscriptions.SubscriptionVerifyError:
@@ -106,17 +104,17 @@ def callback():
 
 api = client.InstagramAPI(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, access_token= ACCESS_TOKEN) 
 
-#tekee subscription-toiminnon n. 5 sekunnin kuluttua flask-sovelluksen kaynnistyttya
+#tekee subscription-toiminnon 5 sekunnin kuluttua flask-sovelluksen kaynnistyttya
 def doSubscribe():
     print "Subscription process starting"
-    time.sleep(5)
+    time.sleep(3)
     global tag
     subscribeToTag(tag)
     print 'Subscription process ended'
 	
 def startApp():
     global app
-    app.run(debug=True, port=8000)
+    app.run(debug=True, port=8000, use_reloader=True)
 
 
 def stop_subscription():
@@ -126,8 +124,59 @@ def stop_subscription():
 reactor = subscriptions.SubscriptionsReactor()
 
 
+class ApplicationProcess(multiprocessing.Process):
+
+    def __init__(self, ):
+        multiprocessing.Process.__init__(self)
+        self.exit = multiprocessing.Event()
+
+    def run(self):
+        try:
+            startApp()
+        except (KeyboardInterrupt, SystemExit):
+            print "Exiting..."
+
+    def terminate(self):
+        print "Flask application shutdown initiated"
+        self.exit.set()
+
+class SubscriptionProcess(multiprocessing.Process):
+
+    def __init__(self, ):
+        multiprocessing.Process.__init__(self)
+        self.exit = multiprocessing.Event()
+
+    def run(self):
+        try:
+          doSubscribe()
+        except Exception, e:
+          print "Error during subscription process"
+          print e
+
+    def terminate(self):
+        self.exit.set()
+
+
 if __name__ == '__main__':
-   server = Process(target=startApp)
-   server.start()
-   sub = Process(target=doSubscribe)
-   sub.start()
+   """ ###Threading###
+
+   appProcess = threading.Thread(target=startApp)
+   appProcess.daemon = True
+   appProcess.start()
+   subProcess = threading.Thread(target=doSubscribe)
+   subProcess.daemon = False
+   subProcess.start()
+
+   """
+
+   flaskapp = ApplicationProcess()
+   flaskapp.start()
+   subProcess = SubscriptionProcess()
+   subProcess.start()
+
+   while True:
+      try:
+        time.sleep(1)
+      except KeyboardInterrupt, SystemExit:
+        print "Exiting..."
+        sys.exit(0)
