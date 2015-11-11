@@ -13,7 +13,11 @@ def instagramPosts():
 		cur.execute('SELECT shortcode FROM instagram_posts')
 		rows = cur.fetchall()
 		for row in rows:
-			data.append(oembedInstagram.getOEmbed(row[3])])
+			if oembedInstagram.getOEmbed(row):
+				data.append(oembedInstagram.getOEmbed(row))
+			else:
+				print oembedInstagram.getOEmbed(str(row))
+				continue
 		return data
 	except lite.Error, e:
 		print "Error &s:" % e.args[0]

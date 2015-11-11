@@ -12,6 +12,9 @@ from datetime import datetime
 """
 https://api.instagram.com/v1/subscriptions?client_secret
 =bdadba8a4b274b45bdfcb306cfd6b120&client_id=efe6cccbd3ac4e75b842c957e954c569
+
+curl -X DELETE 'https://api.instagram.com/v1/subscriptions?client_secret=
+bdadba8a4b274b45bdfcb306cfd6b120&object=all&client_id=efe6cccbd3ac4e75b842c957e954c569'
 """
 
 CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
@@ -64,6 +67,11 @@ def savetoDataBase(userID,user,timestamp,shortcode):
    try:
      con = sql3.connect("instagram.db")
      cur = con.cursor()
+     cur.execute("SELECT shortcode FROM instagram_posts WHERE shortcode LIKE ?", (str(shortcode),))
+     row = cur.fetchone()
+     if row:
+      con.close()
+      return
      cur.execute("INSERT INTO instagram_posts (id, username, time, shortcode) VALUES (?, ?, ?, ?)",
      (str(userID), str(user), str(timestamp.strftime("%d.%m.%Y %H:%M")), str(shortcode)))
      con.commit()
@@ -130,11 +138,6 @@ class SubscriptionProcess(multiprocessing.Process):
     def terminate(self):
         self.exit.set()
 
-        
-if __name__ == '__main__':  
-   subProcess = SubscriptionProcess()
-   subProcess.start()
-   
    
 def startSubscription():
    #if (list_subscriptions() == None):

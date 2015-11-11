@@ -7,10 +7,11 @@
     <title>SSM Developers</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script sync src="https://platform.twitter.com/widgets.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='javascriptit.js') }}"></script>
+    <script async defer src="http://platform.instagram.com/en_US/embeds.js"></script>
 </head>
 <body>
     <style>
@@ -40,14 +41,8 @@
 
             <div class="col-md-6" id="div_insta">
                 <h2>Instagram</h2>
-                {% for item in tweets %}
-                <div name="update">
-                    <fieldset>
-                        <legend>{{ item[0] }}:</legend>
-                        <p>{{ item[1] }}</p>
-                        <img src="{{ item[3] }}" alt="Kuvaa ei ole">
-                     </fieldset>
-                </div>
+                {% for item in insta %}
+                {{ item|safe }}
                 {% endfor %}
             </div>
         </div>

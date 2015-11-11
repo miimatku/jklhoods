@@ -1,11 +1,22 @@
-from flask import Flask
+from flask import Flask, render_template
 import multiprocessing
 import streaminstagram
 import time, sys
+import instaposts, twiitit
 
 """
 https://api.instagram.com/v1/subscriptions?client_secret
 =bdadba8a4b274b45bdfcb306cfd6b120&client_id=efe6cccbd3ac4e75b842c957e954c569
+
+curl -X DELETE 'https://api.instagram.com/v1/subscriptions?client_secret=bdadba8a4b274b45bdfcb306cfd6b120&object=all&client_id=efe6cccbd3ac4e75b842c957e954c569'
+
+curl -F 'client_id=efe6cccbd3ac4e75b842c957e954c569' \
+     -F 'client_secret=bdadba8a4b274b45bdfcb306cfd6b120' \
+     -F 'object=tag' \
+     -F 'aspect=media' \
+     -F 'object_id=swag' \
+     -F 'callback_url=https://nzmpqlpmhe.localtunnel.me/realtime' \
+     https://api.instagram.com/v1/subscriptions/
 """
 
 app = Flask(__name__)
@@ -15,7 +26,7 @@ app.add_url_rule('/realtime', methods = ['GET', 'POST'], view_func=streaminstagr
 @app.route('/')
 def index():
     return render_template('index.html', tweets=twiitit.twiits(), 
-testimuuttuja='testi2')
+    	insta=instaposts.instagramPosts())
 @app.route('/twitter')
 def twitter():
     return 'Twitter is here'
@@ -42,7 +53,7 @@ class ApplicationProcess(multiprocessing.Process):
     
 def startApp():
     global app
-    app.run(debug=True, port=8000, use_reloader=True)
+    app.run(debug=True, port=7999, use_reloader=True)
 
 
 def initializeInstagram():
@@ -52,8 +63,8 @@ def initializeInstagram():
 if __name__ == '__main__':
    flaskapp = ApplicationProcess()
    flaskapp.start()
-   instagramSubscription = multiprocessing.Process(target=initializeInstagram)
-   instagramSubscription.start()
+#   instagramSubscription = multiprocessing.Process(target=initializeInstagram)
+#   instagramSubscription.start()
    
    while True:
       try:
