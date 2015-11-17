@@ -9,7 +9,7 @@ def twiits():
 
 		tweets = []
 		cur = con.cursor()
-		cur.execute('SELECT id FROM twitter_tweets')
+		cur.execute('SELECT tweetID FROM twitter_tweets')
 		#filterointia varten
 		#cur.execute('SELECT tweet.id FROM twitter_tweets tweet INNER JOIN twitter_tags tag ON tweet.id = tag.id')
 		rows = cur.fetchall()
