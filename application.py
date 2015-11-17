@@ -5,6 +5,7 @@ import time, sys
 import instaposts, twiitit
 
 """
+
 https://api.instagram.com/v1/subscriptions?client_secret
 =bdadba8a4b274b45bdfcb306cfd6b120&client_id=efe6cccbd3ac4e75b842c957e954c569
 
@@ -18,7 +19,9 @@ curl -F 'client_id=efe6cccbd3ac4e75b842c957e954c569' \
      -F 'callback_url=https://nzmpqlpmhe.localtunnel.me/realtime' \
      https://api.instagram.com/v1/subscriptions/
 
-     lt --port 8000 --subdomain nzmpqlpmhe
+
+lt --port 8000 --subdomain nzmpqlpmhe
+
 """
 
 app = Flask(__name__)

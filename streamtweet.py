@@ -12,11 +12,16 @@ csecret="AxHMUj8Am1Z0bTrjg7OlZmIW6S1iCCbCGJj7esvNwsWOkFCxVM"
 atoken="3869893516-1jWdaC3do0Dvhyb8TP8C6bvaYPRBMt28ug4aoDW"
 asecret="IbEu7Q0an9E3T3wzzrYCIRKqy9T370Xnz4HdHFTcrEfWI"
 
+new = 0
 
 con = sql3.connect("tweets.db")
 
 cur = con.cursor()
 
+def newTweets():
+    if new == 0:
+        return
+    
 
 class Listener(StreamListener):
 
@@ -29,11 +34,11 @@ class Listener(StreamListener):
         screen_name = all_data["user"]["screen_name"]
         tagit = all_data["entities"]["hashtags"]
 
-        cur.execute("INSERT INTO twitter_tweets (id, time, username, screen_name) VALUES (?, ?, ?, ?)",
+        cur.execute("INSERT INTO twitter_tweets (tweetID, time, username, screen_name) VALUES (?, ?, ?, ?)",
             (id, time, name, screen_name))
 
         for text in tagit:
-        	cur.execute("INSERT INTO twitter_tags (id, hashtag) VALUES (?, ?)",
+        	cur.execute("INSERT INTO twitter_tags (tweetID, hashtag) VALUES (?, ?)",
         		(id, text["text"]))
 		
 
@@ -53,7 +58,7 @@ auth = OAuthHandler(ckey, csecret)
 auth.set_access_token(atoken, asecret)
 
 twitterStream = Stream(auth, Listener())
-twitterStream.filter(track=["#swag"])
+twitterStream.filter(track=["#car"])
 
 #def runStream():
 #    auth = OAuthHandler(ckey, csecret)
