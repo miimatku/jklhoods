@@ -1,6 +1,5 @@
 import sqlite3 as lite
 import sys
-import oembedInstagram
 
 def instagramPosts():
 	con = None
@@ -13,12 +12,9 @@ def instagramPosts():
 		cur.execute('SELECT shortcode FROM instagram_posts')
 		rows = cur.fetchall()
 		for row in rows:
-#			print oembedInstagram.getOEmbed(str(row))
 			if row:
-#				data.append(oembedInstagram.getOEmbed(row))
 				data.append(row[0])
 			else:
-#				print oembedInstagram.getOEmbed(str(row))
 				continue
 		return data
 	except lite.Error, e:
