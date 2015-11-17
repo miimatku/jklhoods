@@ -17,6 +17,8 @@ curl -F 'client_id=efe6cccbd3ac4e75b842c957e954c569' \
      -F 'object_id=swag' \
      -F 'callback_url=https://nzmpqlpmhe.localtunnel.me/realtime' \
      https://api.instagram.com/v1/subscriptions/
+
+     lt --port 8000 --subdomain nzmpqlpmhe
 """
 
 app = Flask(__name__)
@@ -53,7 +55,7 @@ class ApplicationProcess(multiprocessing.Process):
     
 def startApp():
     global app
-    app.run(debug=True, port=8002, use_reloader=True)
+    app.run(debug=True, port=8000, use_reloader=True)
 
 
 def initializeInstagram():

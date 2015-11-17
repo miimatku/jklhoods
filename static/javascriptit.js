@@ -29,13 +29,13 @@
     function instagramBlock() {
     //    http://api.instagram.com/oembed?url=http://instagr.am/p/{shortcode}
     // theUrl, callback
-        var Url = "http://api.instagram.com/oembed?omitscript=true&url=http://instagr.am/p/"
+        var Url = "//api.instagram.com/oembed?url=http://instagr.am/p/"
         var instaposts = $(".instapost");
         instaposts.each(function(index){
             var shortcode = this.getAttribute("instacode");
             var theUrl = Url.concat(shortcode);
             console.log(theUrl);
-
+            var paikka = this;
             $.ajax({
                 type: "GET",
                 dataType: "jsonp",
@@ -43,13 +43,16 @@
                 url: theUrl,
                 success: function(response) {
 //                    $("instacode='"+shortcode+"'").html(response['html']);
-
-                    $(this).html($.parseHTML(response['html']));
+                    console.log('testi');
+                    $(paikka).html($.parseHTML(response['html']));
                     instgrm.Embeds.process();
+
+
                 }
             });
 
         });
+        //instgrm.Embeds.process();
 
     /*    var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() { 
