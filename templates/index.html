@@ -42,7 +42,7 @@
             <div class="col-md-6" id="div_insta">
                 <h2>Instagram</h2>
                 {% for item in insta %}
-                {{ item|safe }}
+                <div class="instapost" instacode="{{ item }}"></div>
                 {% endfor %}
             </div>
         </div>

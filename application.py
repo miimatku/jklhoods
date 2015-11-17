@@ -53,7 +53,7 @@ class ApplicationProcess(multiprocessing.Process):
     
 def startApp():
     global app
-    app.run(debug=True, port=7999, use_reloader=True)
+    app.run(debug=True, port=8002, use_reloader=True)
 
 
 def initializeInstagram():
