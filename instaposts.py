@@ -9,7 +9,7 @@ def instagramPosts():
 
 		data = []
 		cur = con.cursor()
-		cur.execute('SELECT shortcode FROM instagram_posts')
+		cur.execute('SELECT shortcode FROM instagram_posts LIMIT 10')
 		rows = cur.fetchall()
 		for row in rows:
 			if row:

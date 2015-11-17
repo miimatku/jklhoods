@@ -25,7 +25,7 @@ CALLBACK_HEROKU = 'https://shielded-wave-4959.herokuapp.com/callback'
 CALLBACK_LOCAL = 'http://localhost:5000/oauth_callback'
 CALLBACK_TUNNEL = 'https://nzmpqlpmhe.localtunnel.me/realtime' #lt --port 8000 --subdomain nzmpqlpmhe
 
-tag = 'swag'
+tag = 'car'
 subID = 0
 
 reactor = None
@@ -72,7 +72,7 @@ def savetoDataBase(userID,user,timestamp,shortcode):
      if row:
       con.close()
       return
-     cur.execute("INSERT INTO instagram_posts (id, username, time, shortcode) VALUES (?, ?, ?, ?)",
+     cur.execute("INSERT INTO instagram_posts (userID, username, time, shortcode) VALUES (?, ?, ?, ?)",
      (str(userID), str(user), str(timestamp.strftime("%d.%m.%Y %H:%M")), str(shortcode)))
      con.commit()
    except sql3.Error, e:
