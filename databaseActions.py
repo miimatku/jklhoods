@@ -13,7 +13,7 @@ def getinstagramCount():
 	return row
 
 
-def gettwitterCount():
+def getTwitterCount():
 	row = None
 	try:
 		con = sql3.connect("tweets.db")
@@ -25,14 +25,28 @@ def gettwitterCount():
 		con.close()
 	return row
 
+def getTagsCount():
+	row = None
+	try:
+		con = sql3.connect("tweets.db")
+		cur = con.cursor()
+		cur.execute("SELECT COUNT(*) as count FROM twitter_tags")
+		row = cur.fetchone()
+		con.close()
+	except Exception, e:
+		con.close()
+	return row
+
 
 def deleteOldestInstagram(amount):
 	try:
 		con = sql3.connect("instagram.db")
 		cur = con.cursor()
-		cur.execute("DELETE FROM instagram_posts WHERE id IN (SELECT id FROM instagram_posts ORDER BY id ASC LIMIT ?)"(amount,) )
+		cur.execute("DELETE FROM instagram_posts WHERE id IN (SELECT id FROM instagram_posts ORDER BY id ASC LIMIT ?)", (amount,) )
+		con.commit()
 		con.close()
 	except Exception, e:
+		print "Error &s:" % e.args[0]
 		con.close()
 
 
@@ -40,28 +54,18 @@ def deleteOldestTweets(amount):
 	try:
 		con = sql3.connect("tweets.db")
 		cur = con.cursor()
-		#cur.execute("DELETE FROM twitter_tweets WHERE id IN (SELECT id FROM twitter_tweets ORDER BY id ASC LIMIT ?)"(amount,) )
-		#cur.execute(("""DELETE twitter_tweets, twitter_tags  FROM twitter_tweets ORDER BY id ASC LIMIT 1 INNER JOIN twitter_tags WHERE 
-		#	twitter_tweets.tweetID = twitter_tags.tweetID"""))
-
-		cur.execute("""DELETE tweets.*, tags.*  
-			            FROM twitter_tweets as tweets
-			            LEFT JOIN twitter_tags as tags ON tweets.tweetID = tags.tweetID
-			            ORDER BY id ASC LIMIT 1
-					""")
-
+		
+		#tagien poisto
+		cur.execute("SELECT tweetID FROM twitter_tweets ORDER BY id ASC LIMIT ?", (amount,) )
+		rows = cur.fetchall()
+		tag_deletion = 'DELETE FROM twitter_tags WHERE tweetID IN (' + ','.join(str(r[0]) for r in rows) + ')'
+		cur.execute(tag_deletion)
+		
+		#tweettien poisto
+		cur.execute("DELETE FROM twitter_tweets WHERE id IN (SELECT id FROM twitter_tweets ORDER BY id ASC LIMIT ?)", (amount,) )
+		
+		con.commit()
 		con.close()
 	except Exception, e:
 		print "Error &s:" % e.args[0]
 		con.close()
-
-
-
-
-
-
-deleteOldestTweets(1)
-
-
-print gettwitterCount()
-print getinstagramCount()
