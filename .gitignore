@@ -2,6 +2,7 @@
 
 __MACOSX
 .DS_Store
+*.pyc
 
 # OS generated files #
 ######################
