@@ -4,6 +4,8 @@ from tweepy.streaming import StreamListener
 import sqlite3 as sql3
 import time
 import json
+import time
+from datetime import datetime
 #import sys
 
 #consumer key, consumer secret, access token, access secret.
@@ -29,13 +31,13 @@ class Listener(StreamListener):
         all_data = json.loads(data)
         
         id = all_data["id_str"]
-        time = all_data["created_at"]
+        timestamp = time.strftime('%Y.%m.%d %H:%M', time.strptime(all_data["created_at"],'%a %b %d %H:%M:%S +0000 %Y'))
         name = all_data["user"]["name"]
         screen_name = all_data["user"]["screen_name"]
         tagit = all_data["entities"]["hashtags"]
 
         cur.execute("INSERT INTO twitter_tweets (tweetID, time, username, screen_name) VALUES (?, ?, ?, ?)",
-            (id, time, name, screen_name))
+            (id, timestamp, name, screen_name))
 
         for text in tagit:
         	cur.execute("INSERT INTO twitter_tags (tweetID, hashtag) VALUES (?, ?)",
