@@ -2,7 +2,7 @@ from flask import Flask, render_template
 import multiprocessing
 import streaminstagram
 import time, sys
-import instaposts, twiitit
+import instaposts, twiitit, hashtags_twitter
 
 """
 
@@ -38,6 +38,10 @@ def twitter():
 @app.route('/about')
 def about():
     return 'The about page'    
+
+@app.route('/hashtags',methods = ['POST'])
+def hashtags():
+    return hashtags_twitter.tagit_twitter() 
     
 class ApplicationProcess(multiprocessing.Process):
 

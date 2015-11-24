@@ -9,6 +9,7 @@
         $("#show_twitter").click(show_twitter);
         $("#show_insta").click(show_instagram);
         $("#show_all").click(show_all);
+        $("#drop_twitter").click(twitter_top_hastags);
     }
 
     function instagramBlock() {
@@ -97,5 +98,25 @@
         $("#div_twitter").hide();
         $("#div_insta").show();
         $("#div_insta").removeClass("col-md-6")
+    }
+
+
+    function twitter_top_hastags(e) {
+        e.preventDefault();
+        $.post('/hashtags',
+            function(data) {
+                $("#twitter_top1").text(data.result[1]);
+                $("#twitter_top2").text(data.result[2]);
+                $("#twitter_top3").text(data.result[3]);
+                $("#twitter_top4").text(data.result[4]);
+                $("#twitter_top5").text(data.result[5]);
+            })
+        //$.ajax({
+        //    dataType: "json",
+        //    url: "{{ url_for(filename='hashtags_twitter.py') }}",
+        //    success: function(data) {
+         //       alert("data[0]");
+        //    }
+        //});
     }
 

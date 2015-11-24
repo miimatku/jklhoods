@@ -2,6 +2,14 @@ h2 {
 	text-align: center;
 }
 
+.div_nav_left{
+    float: left;
+}
+
+.div_nav_right{
+    float: right;
+}
+
 .tweet iframe {
 	margin: auto;
 }
