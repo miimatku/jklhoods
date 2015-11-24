@@ -58,6 +58,8 @@ def fetchNewUpdate(amount=1):
   tagged_media, next_ = api.tag_recent_media(tag_name=tag, count=amount)
   for media in tagged_media:
      #id = media.id
+     comment = media.caption
+     print comment
      user = media.user.username
      userID = media.user.id
      timestamp = media.created_time

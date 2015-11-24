@@ -7,6 +7,7 @@ logging.basicConfig()
 
 LIMIT = 400
 
+
 def getInstagramCount():
 	row = None
 	try:
@@ -32,6 +33,7 @@ def getTweetsCount():
 		con.close()
 	return row
 
+
 def getTagsCount():
 	row = None
 	try:
@@ -43,6 +45,7 @@ def getTagsCount():
 	except Exception, e:
 		con.close()
 	return row
+
 
 #Poistaa vanhimmat tietokannan rivit
 def deleteOldestInstagram(week_old_id):
@@ -84,6 +87,7 @@ def startScheduler():
 	print 'Scheduler has started.'
 	while True:
 		time.sleep(5)
+
 
 #etsii tietokannasta ensimmaisen rivin, joka on yli viikon vanha
 def findInstagramLimit():
