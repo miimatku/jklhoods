@@ -48,9 +48,29 @@
     }
 
     function fetchTweets() {
+        var tweetit = $(".tweet");
+        var data = tweetit[0].getAttribute("tweetID")
         $.ajax({
-            
-        })
+            method: "POST",
+            url: '/fetchTweets',
+            contentType: 'application/json',
+            data: JSON.stringify(String(data)),
+            dataType: "json",
+            success: function(data) {
+                alert(data['result'].length);
+                if (JSON.stringify(data['result'].length) > 0) {
+                    for (var i = 0; i < JSON.stringify(data['result'].length); i++) {
+                        var testi = '<div class="tweet" tweetID="'+
+                        String(data.result[i])+'"></div>';
+                        $(testi).insertAfter( "h2" );
+                        $("#div_twitter div").slice(-1).remove();
+                    };
+                    twitteriStriimi2(data['result']);
+                    console.log(data['result']);
+                    console.log(data['result'][0]);
+                }
+            }
+        });
     }
 
     function fetchInstas() {
@@ -59,6 +79,18 @@
         })
     }
 
+    function twitteriStriimi2(lista) {
+        var tweets = document.getElementsByClassName("tweet");
+        for (i = 0; i < lista.length; i++) {
+            var id = tweets[i].getAttribute("tweetID");
+            twttr.widgets.createTweet(lista[i], tweets[i],{
+                conversation : 'none',    // or all
+                cards        : 'visible',  // or visible 
+                linkColor    : '#cc0000', // default is blue
+                theme        : 'light'    // or dark
+            });
+        }; 
+    }
 
     function twitteriStriimi() {
     	 var tweets = document.getElementsByClassName("tweet");

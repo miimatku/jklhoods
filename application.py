@@ -50,6 +50,10 @@ def hashtags_insta():
 @app.route('/hae_twitter_tagilla',methods = ['POST'])
 def hae_twitter_tagilla():
     return twiitit.hae_tagilla(request.get_json())
+
+@app.route('/fetchTweets', methods = ['POST'])
+def fetchTweets():
+    return twiitit.fetchTweets(request.get_json())
     
 class ApplicationProcess(multiprocessing.Process):
 

@@ -10,7 +10,7 @@ def twiits():
 
 		tweets = []
 		cur = con.cursor()
-		cur.execute('SELECT tweetID FROM twitter_tweets LIMIT 10')
+		cur.execute('SELECT tweetID FROM twitter_tweets ORDER BY id DESC LIMIT 10')
 		#filterointia varten
 		#cur.execute('SELECT tweet.id FROM twitter_tweets tweet INNER JOIN twitter_tags tag ON tweet.id = tag.id')
 		rows = cur.fetchall()
@@ -40,6 +40,24 @@ def hae_tagilla(req):
 		for row in rows:
 			tweets.append([row[0]])
 		return jsonify(result=tweets)
+	except lite.Error, e:
+		print "Error &s:" % e.args[0]
+		sys.exit(1)
+	finally:
+		if con:
+			con.close()
+
+def fetchTweets(tweetId):
+	con = None
+	try:
+		con = lite.connect('tweets.db')
+		data_tweet = []
+		cur = con.cursor()
+		cur.execute('SELECT tweetID FROM twitter_tweets WHERE tweetID > ?', (tweetId,))
+		rows = cur.fetchall()
+		for row in rows:
+			data_tweet.append([str(row[0])])
+		return jsonify(result=data_tweet)
 	except lite.Error, e:
 		print "Error &s:" % e.args[0]
 		sys.exit(1)
