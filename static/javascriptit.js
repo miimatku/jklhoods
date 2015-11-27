@@ -57,17 +57,17 @@
             data: JSON.stringify(String(data)),
             dataType: "json",
             success: function(data) {
-                alert(data['result'].length);
-                if (JSON.stringify(data['result'].length) > 0) {
-                    for (var i = 0; i < JSON.stringify(data['result'].length); i++) {
+//                alert(data['result'].length);
+                var count = data['result'].length;
+                alert(count);
+                if (count > 0) {
+                    for (var i = 0; i < count; i++) {
                         var testi = '<div class="tweet" tweetID="'+
                         String(data.result[i])+'"></div>';
                         $(testi).insertAfter( "h2" );
                         $("#div_twitter div").slice(-1).remove();
                     };
-                    twitteriStriimi2(data['result']);
-                    console.log(data['result']);
-                    console.log(data['result'][0]);
+                    twitteriStriimi2(count);
                 }
             }
         });
@@ -79,11 +79,11 @@
         })
     }
 
-    function twitteriStriimi2(lista) {
+    function twitteriStriimi2(count) {
         var tweets = document.getElementsByClassName("tweet");
-        for (i = 0; i < lista.length; i++) {
+        for (i = 0; i < count; i++) {
             var id = tweets[i].getAttribute("tweetID");
-            twttr.widgets.createTweet(lista[i], tweets[i],{
+            twttr.widgets.createTweet(id, tweets[i],{
                 conversation : 'none',    // or all
                 cards        : 'visible',  // or visible 
                 linkColor    : '#cc0000', // default is blue
