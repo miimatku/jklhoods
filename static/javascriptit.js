@@ -1,8 +1,10 @@
     // Javascript source code
     window.onload = function(){
     	alustus();
-    	twitteriStriimi();
+    	twitteriStriimi(10);
         instagramBlock();
+//        fetchTweets();
+        ajastin = setInterval(fetchTweets.bind(null, false), 5000);
     }
 
     function alustus() {
@@ -11,6 +13,11 @@
         $("#show_all").click(show_all);
         $("#drop_twitter").click(twitter_top_hastags);
         $("#drop_instagram").click(instagram_top_hastags);
+        $("#uusia_twiitteja").click(function() {
+//            e.preventDefault();
+            $(this).hide();
+            fetchTweets(true);
+        });
     }
 
     function instagramBlock() {
@@ -47,7 +54,7 @@
     */
     }
 
-    function fetchTweets() {
+    function fetchTweets(jatka) {
         var tweetit = $(".tweet");
         var data = tweetit[0].getAttribute("tweetID")
         $.ajax({
@@ -57,20 +64,53 @@
             data: JSON.stringify(String(data)),
             dataType: "json",
             success: function(data) {
-//                alert(data['result'].length);
                 var count = data['result'].length;
-                alert(count);
                 if (count > 0) {
-                    for (var i = 0; i < count; i++) {
-                        var testi = '<div class="tweet" tweetID="'+
-                        String(data.result[i])+'"></div>';
-                        $(testi).insertAfter( "h2" );
-                        $("#div_twitter div").slice(-1).remove();
+                    if (jatka === true) {
+                        for (var i = 0; i < count; i++) {
+                            var testi = '<div class="tweet" tweetID="'+
+                            String(data.result[i])+'"></div>';
+                            $(testi).insertAfter( "#uusia_twiitteja" );
+                            $("#div_twitter div").slice(-1).remove();
+          //  data.result[i].
+                        };
+                        twitteriStriimi(count);
+                    } else {
+                        $('#uusia_twiitteja').show();
                     };
-                    twitteriStriimi2(count);
-                }
+                };
             }
         });
+    }
+
+    function uusiaTwiitteja(count, elements) {
+        
+        for (var i = 0; i < count; i++) {
+            var testi = '<div class="tweet" tweetID="'+
+            String(data.result[i])+'"></div>';
+            $(testi).insertAfter( "h2" );
+            $("#div_twitter div").slice(-1).remove();
+          //  data.result[i].
+        };
+        twitteriStriimi(count);
+
+    }
+
+    function twitteriStriimi(count) {
+        var new_tweets = count;
+        if (count > 10) {
+            new_tweets = 10;
+        }
+        var tweets = document.getElementsByClassName("tweet");
+        for (i = 0; i < new_tweets; i++) {
+            var id = tweets[i].getAttribute("tweetID");
+            twttr.widgets.createTweet(id, tweets[i],{
+                conversation : 'none',    // or all
+                cards        : 'visible',  // or visible 
+                linkColor    : '#cc0000', // default is blue
+                theme        : 'light'    // or dark
+            });
+        }; 
     }
 
     function fetchInstas() {
@@ -78,33 +118,6 @@
             
         })
     }
-
-    function twitteriStriimi2(count) {
-        var tweets = document.getElementsByClassName("tweet");
-        for (i = 0; i < count; i++) {
-            var id = tweets[i].getAttribute("tweetID");
-            twttr.widgets.createTweet(id, tweets[i],{
-                conversation : 'none',    // or all
-                cards        : 'visible',  // or visible 
-                linkColor    : '#cc0000', // default is blue
-                theme        : 'light'    // or dark
-            });
-        }; 
-    }
-
-    function twitteriStriimi() {
-    	 var tweets = document.getElementsByClassName("tweet");
-        for (i = 0; i < tweets.length; i++) {
-            var id = tweets[i].getAttribute("tweetID");
-            twttr.widgets.createTweet(id, tweets[i],{
-                conversation : 'none',    // or all
-                cards        : 'visible',  // or visible 
-                linkColor    : '#cc0000', // default is blue
-                theme        : 'light'    // or dark
-            });
-        }; 
-    }
-
 
     //Show all feed
     function show_all(e){
