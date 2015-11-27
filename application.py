@@ -1,8 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import multiprocessing
 import streaminstagram
 import time, sys
-import instaposts, twiitit, hashtags_twitter
+import instaposts, twiitit, hashtags_twitter, hashtags_instagram
 
 """
 
@@ -42,6 +42,14 @@ def about():
 @app.route('/hashtags',methods = ['POST'])
 def hashtags():
     return hashtags_twitter.tagit_twitter() 
+
+@app.route('/hashtags_insta',methods = ['POST'])
+def hashtags_insta():
+    return hashtags_instagram.tagit_instagram() 
+
+@app.route('/hae_twitter_tagilla',methods = ['POST'])
+def hae_twitter_tagilla():
+    return twiitit.hae_tagilla(request.get_json())
     
 class ApplicationProcess(multiprocessing.Process):
 

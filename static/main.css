@@ -10,12 +10,22 @@ h2 {
     float: right;
 }
 
+
 .tweet iframe {
 	margin: auto;
 }
 
+.instapost iframe {
+  margin: auto !important;
+}
+
 .twitter_logo {
 	max-width: 50px;
+}
+
+
+body {
+  padding-top: 70px;
 }
 
   /*#tweet {

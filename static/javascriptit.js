@@ -10,6 +10,7 @@
         $("#show_insta").click(show_instagram);
         $("#show_all").click(show_all);
         $("#drop_twitter").click(twitter_top_hastags);
+        $("#drop_instagram").click(instagram_top_hastags);
     }
 
     function instagramBlock() {
@@ -119,4 +120,42 @@
         //    }
         //});
     }
+
+
+    function instagram_top_hastags(e) {
+        e.preventDefault();
+        $.post('/hashtags_insta',
+            function(data) {
+                $("#instagram_top1").text(data.result[1]);
+                $("#instagram_top2").text(data.result[2]);
+                $("#instagram_top3").text(data.result[3]);
+                $("#instagram_top4").text(data.result[4]);
+                $("#instagram_top5").text(data.result[5]);
+            })
+        //$.ajax({
+        //    dataType: "json",
+        //    url: "{{ url_for(filename='hashtags_twitter.py') }}",
+        //    success: function(data) {
+         //       alert("data[0]");
+        //    }
+        //});
+    }
+
+
+    function haeTagilla(tagi) {
+        send = {"tagi" : tagi};
+        $.ajax({
+            dataType: "json",
+            method: "POST",
+            url: "/hae_twitter_tagilla",
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify({"tagi" : tagi}),
+            //data: JSON.stringify(String(tagi)),
+            success: function(data) {
+                //alert(data.result);
+            }
+        });
+
+    }
+
 
