@@ -53,14 +53,14 @@
             </div>
     </nav>
     <div class="container-fluid">  
-        <div class="row"> 
-        <button onclick="fetchTweets()" type="button" >Hae Twiitit</button>
+        <div class="row">
             <div class="col-md-6" name="sisalto" id="div_twitter">
                  <h2 class="twitter_header">Twitter</h2>
             	<div hidden role="button" type="button" id="uusia_twiitteja" href="" >New Tweets</div>
                 {% for item in tweets %}
                 <div class="tweet" tweetID="{{ item[0] }}"></div>
                 {% endfor %}
+                <div id="hae_seuraavat" role="button" type="button" href="">Hae lisää</div>
             </div>
 
             <div class="col-md-6" id="div_insta">

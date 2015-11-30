@@ -18,6 +18,7 @@
             $(this).hide();
             fetchTweets(true);
         });
+        $("#hae_seuraavat").click( function(){ haeSeuraavat(); } );
     }
 
     function instagramBlock() {
@@ -56,7 +57,7 @@
 
     function fetchTweets(jatka) {
         var tweetit = $(".tweet");
-        var data = tweetit[0].getAttribute("tweetID")
+        var data = tweetit[0].getAttribute("tweetID");
         $.ajax({
             method: "POST",
             url: '/fetchTweets',
@@ -93,15 +94,41 @@
           //  data.result[i].
         };
         twitteriStriimi(count);
+    }
 
+    function haeSeuraavat() {
+        var data = $(".tweet:last")[0].getAttribute("tweetid");
+        $.ajax({
+            method: "POST",
+            url: '/haeSeuraavat',
+            contentType: 'application/json',
+            data: JSON.stringify(String(data)),
+            dataType: "json",
+            success: function(data) {
+                var count = data['result'].length;
+                        for (var i = 0; i < count; i++) {
+                            var testi = '<div class="tweet" tweetID="'+
+                            String(data.result[i])+'"></div>';
+                            $(testi).insertBefore( "#hae_seuraavat" );
+          //  data.result[i].
+                        };
+                        twitteriStriimi(-1);
+            }
+        });
     }
 
     function twitteriStriimi(count) {
-        var new_tweets = count;
+        var tweets;
         if (count > 10) {
+            tweets = d$(".tweet").slice(0,10);
             new_tweets = 10;
+        } else if (count === -1) {
+            tweets = $('.tweet').slice(-10);
+            new_tweets = 10;
+        } else {
+            tweets = $(".tweet").slice(0,count);
+            new_tweets = count;
         }
-        var tweets = document.getElementsByClassName("tweet");
         for (i = 0; i < new_tweets; i++) {
             var id = tweets[i].getAttribute("tweetID");
             twttr.widgets.createTweet(id, tweets[i],{

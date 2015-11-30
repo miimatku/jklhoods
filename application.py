@@ -54,6 +54,10 @@ def hae_twitter_tagilla():
 @app.route('/fetchTweets', methods = ['POST'])
 def fetchTweets():
     return twiitit.fetchTweets(request.get_json())
+
+@app.route('/haeSeuraavat', methods = ['POST'])
+def haeSeuraavat():
+    return twiitit.haeSeuraavat(request.get_json())
     
 class ApplicationProcess(multiprocessing.Process):
 

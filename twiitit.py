@@ -64,3 +64,21 @@ def fetchTweets(tweetId):
 	finally:
 		if con:
 			con.close()
+
+def haeSeuraavat(tweetId):
+	con = None
+	try:
+		con = lite.connect('tweets.db')
+		data_tweet = []
+		cur = con.cursor()
+		cur.execute('SELECT tweetID FROM twitter_tweets WHERE tweetID < ? LIMIT 10', (tweetId,))
+		rows = cur.fetchall()
+		for row in rows:
+			data_tweet.append([str(row[0])])
+		return jsonify(result=data_tweet)
+	except lite.Error, e:
+		print "Error &s:" % e.args[0]
+		sys.exit(1)
+	finally:
+		if con:
+			con.close()
