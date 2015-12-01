@@ -65,9 +65,11 @@
 
             <div class="col-md-6" id="div_insta">
                 <h2>Instagram</h2>
+				<div hidden role="button" type="button" id="uusia_posteja" href="" >New Instagram posts</div>
                 {% for item in insta %}
                 <div class="instapost" instacode="{{ item }}"></div>
                 {% endfor %}
+				<div id="hae_seuraavat_instagram" role="button" type="button" href="">Hae lisää</div>
             </div>
         </div>
     </div>

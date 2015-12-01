@@ -1,10 +1,12 @@
     // Javascript source code
     window.onload = function(){
-    	alustus();
-    	twitteriStriimi(10);
-//        instagramBlock();
-//        fetchTweets();
-        ajastin = setInterval(fetchTweets.bind(null, false), 5000);
+        alustus();
+        twitteriStriimi(10);
+        instagramBlock(10);
+        //fetchTweets();
+        ajastin_twitter = setInterval(fetchTweets.bind(null, false), 5000);
+		ajastin_instagram = setInterval(fetchInstagram.bind(null, false), 5000);
+		
     }
 
     function alustus() {
@@ -18,15 +20,32 @@
             $(this).hide();
             fetchTweets(true);
         });
+        $("#uusia_posteja").click(function() {
+//            e.preventDefault();
+			$(this).hide();
+            fetchInstagram(true);
+        });
         $("#hae_seuraavat").click(haeSeuraavat);
+		$("#hae_seuraavat_instagram").click(haeSeuraavat_instagram);
     }
 
-    function instagramBlock() {
+    function instagramBlock(count) {
     //    http://api.instagram.com/oembed?url=http://instagr.am/p/{shortcode}
     // theUrl, callback
+		var posts;
+		if (count > 10) {
+            posts = $(".instapost").slice(0,10);
+            new_posts = 10;
+        } else if (count < 0) {
+            posts = $('.instapost').slice(count);
+            new_posts = Math.abs(count);
+        } else {
+            posts = $(".instapost").slice(0,count);
+            new_posts = count;
+        };
+	
         var Url = "//api.instagram.com/oembed?url=http://instagr.am/p/"
-        var instaposts = $(".instapost");
-        instaposts.each(function(index){
+        posts.each(function(index){
             var shortcode = this.getAttribute("instacode");
             var theUrl = Url.concat(shortcode);
             var paikka = this;
@@ -104,6 +123,9 @@
             }
         });
     }
+	
+	
+	
 
     function twitteriStriimi(count) {
         var tweets;
@@ -128,11 +150,56 @@
         }; 
     }
 
-    function fetchInstas() {
+    function fetchInstagram(jatka) {
+        var posts = $(".instapost");
+        var data = posts[0].getAttribute("instacode");
         $.ajax({
-            
-        })
+            method: "POST",
+            url: '/fetchInstagram',
+            contentType: 'application/json',
+            data: JSON.stringify(String(data)),
+            dataType: "json",
+            success: function(data) {
+                var count = data['result'].length;
+                if (count > 0) {
+                    if (jatka === true) {
+                        for (var i = 0; i < count; i++) {
+                            var div = '<div class="instapost" instacode="'+
+                            String(data.result[i])+'"></div>';
+                            $(div).insertAfter( "#uusia_posteja" );
+                            $(".instapost").slice(-1).remove();
+          //  data.result[i].
+                        };
+                        instagramBlock(count);
+                    } else {
+                        $('#uusia_posteja').show();
+                    };
+				}
+            }
+        });
     }
+	
+    function haeSeuraavat_instagram() {
+        var data = $(".instapost:last")[0].getAttribute("instacode");
+        $.ajax({
+            method: "POST",
+            url: '/haeSeuraavat_instagram',
+            contentType: 'application/json',
+            data: JSON.stringify(String(data)),
+            dataType: "json",
+            success: function(data) {
+                var count = data['result'].length;
+                        for (var i = 0; i < count; i++) {
+                            var div = '<div class="instapost" instacode="'+
+                            String(data.result[i])+'"></div>';
+                            $(div).insertBefore( "#hae_seuraavat_instagram" );
+          //  data.result[i].
+                        };
+                        instagramBlock(-10);
+            }
+        });
+    }
+	
 
     //Show all feed
     function show_all(e){
@@ -146,10 +213,10 @@
 
     //Show only twitter feed
     function show_twitter(e){
-    	e.preventDefault();
-    	$("#div_insta").hide();
+        e.preventDefault();
+        $("#div_insta").hide();
         $("#div_twitter").show();
-    	$("#div_twitter").removeClass("col-md-6");
+        $("#div_twitter").removeClass("col-md-6");
     }
 
 

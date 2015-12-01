@@ -58,10 +58,18 @@ def haes_twitter_tagilla():
 @app.route('/fetchTweets', methods = ['POST'])
 def fetchTweets():
     return twiitit.fetchTweets(request.get_json())
+	
+@app.route('/fetchInstagram', methods = ['POST'])
+def fetchInstagram():
+    return instaposts.fetchInstagram(request.get_json())
 
 @app.route('/haeSeuraavat', methods = ['POST'])
 def haeSeuraavat():
     return twiitit.haeSeuraavat(request.get_json())
+	
+@app.route('/haeSeuraavat_instagram', methods = ['POST'])
+def haeSeuraavat_instagram():
+	return instaposts.fetchNext(request.get_json())
     
 class ApplicationProcess(multiprocessing.Process):
 
@@ -92,8 +100,8 @@ def initializeInstagram():
 if __name__ == '__main__':
    flaskapp = ApplicationProcess()
    flaskapp.start()
-#   instagramSubscription = multiprocessing.Process(target=initializeInstagram)
-#   instagramSubscription.start()
+   #instagramSubscription = multiprocessing.Process(target=initializeInstagram)
+   #instagramSubscription.start()
    
    while True:
       try:
