@@ -72,7 +72,7 @@
                             var testi = '<div class="tweet" tweetID="'+
                             String(data.result[i])+'"></div>';
                             $(testi).insertAfter( "#uusia_twiitteja" );
-                            $("#div_twitter div").slice(-1).remove();
+                            $(".tweet").slice(-1).remove();
           //  data.result[i].
                         };
                         twitteriStriimi(count);
@@ -84,18 +84,18 @@
         });
     }
 
-    function uusiaTwiitteja(count, elements) {
+/*    function uusiaTwiitteja(count, elements) {
         
         for (var i = 0; i < count; i++) {
             var testi = '<div class="tweet" tweetID="'+
             String(data.result[i])+'"></div>';
             $(testi).insertAfter( "h2" );
-            $("#div_twitter div").slice(-1).remove();
+            $(".tweet").slice(-1).remove();
           //  data.result[i].
         };
         twitteriStriimi(count);
     }
-
+*/
     function haeSeuraavat() {
         var data = $(".tweet:last")[0].getAttribute("tweetid");
         $.ajax({
@@ -120,7 +120,7 @@
     function twitteriStriimi(count) {
         var tweets;
         if (count > 10) {
-            tweets = d$(".tweet").slice(0,10);
+            tweets = $(".tweet").slice(0,10);
             new_tweets = 10;
         } else if (count === -1) {
             tweets = $('.tweet').slice(-10);
