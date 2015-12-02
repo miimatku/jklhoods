@@ -296,6 +296,36 @@
 
     }
 
+
+
+    function haeTagillaInsta(tagi) {
+        send = {"tagi" : tagi};
+        $.ajax({
+            dataType: "json",
+            method: "POST",
+            url: "/hae_instagram_tagilla",
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify(send),
+            //data: JSON.stringify(String(tagi)),
+            success: function(data) {
+                //alert(data.result);
+                $(".instapost").remove();
+                var count = data['result'].length;
+                for (var i = 0; i < count; i++) {
+                    var testi = '<div class="instapost" instacode="'+
+                    String(data.result[i])+'"></div>';
+                    $(testi).insertBefore( "#hae_seuraavat_instagram" );
+          //  data.result[i].
+                };
+                instagramBlock(10);
+                //$("#hae_seuraavat").off('click');
+                //$("#hae_seuraavat").click( function(){ haeSeuraavatTagilla(tagi); } );
+            }
+        });
+
+    }
+
+
     function haeSeuraavatTagilla(tagi) {
         var data = $(".tweet:last")[0].getAttribute("tweetid");
         send = {"tagi" : tagi, "tweetId" : data};

@@ -51,6 +51,10 @@ def hashtags_insta():
 def hae_twitter_tagilla():
     return twiitit.hae_tagilla(request.get_json())
 
+@app.route('/hae_instagram_tagilla',methods = ['POST'])
+def hae_instagram_tagilla():
+    return instaposts.hae_tagilla(request.get_json())
+
 @app.route('/haes_twitter_tagilla',methods = ['POST'])
 def haes_twitter_tagilla():
     return twiitit.haes_tagilla(request.get_json())
