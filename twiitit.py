@@ -15,8 +15,8 @@ def twiits():
 		#cur.execute('SELECT tweet.id FROM twitter_tweets tweet INNER JOIN twitter_tags tag ON tweet.id = tag.id')
 		rows = cur.fetchall()
 		for row in rows:
-			tweets.append([row[0]])
-		return tweets
+			tweets.append([str(row[0])])
+		return jsonify(result=tweets)
 	except lite.Error, e:
 		print "Error &s:" % e.args[0]
 		sys.exit(1)
@@ -78,6 +78,26 @@ def fetchTweets(tweetId):
 		data_tweet = []
 		cur = con.cursor()
 		cur.execute('SELECT tweetID FROM twitter_tweets WHERE tweetID > ?', (tweetId,))
+		rows = cur.fetchall()
+		for row in rows:
+			data_tweet.append([str(row[0])])
+		return jsonify(result=data_tweet)
+	except lite.Error, e:
+		print "Error &s:" % e.args[0]
+		sys.exit(1)
+	finally:
+		if con:
+			con.close()
+
+def fetchTagTweets(req):
+	con = None
+	tagi = req["tagi"]
+	tweetId = req["tweetId"]
+	try:
+		con = lite.connect('tweets.db')
+		data_tweet = []
+		cur = con.cursor()
+		cur.execute('SELECT twitter_tweets.tweetID FROM twitter_tweets, twitter_tags WHERE twitter_tweets.tweetID = twitter_tags.tweetID AND twitter_tags.hashtag LIKE ? AND twitter_tweets.tweetID > ? ORDER BY id DESC LIMIT 10', (str(tagi), str(tweetId)) )
 		rows = cur.fetchall()
 		for row in rows:
 			data_tweet.append([str(row[0])])
