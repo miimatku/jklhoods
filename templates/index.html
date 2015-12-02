@@ -24,6 +24,7 @@
                         <!-- <img src="{{ url_for('static', filename='TwitterLogo_#55acee.png')}}" alt="Twitter" class="twitter_logo"> -->
                         </a>
                         <a class="navbar-brand" id="show_insta" role="button" href="">Instagram</a>
+                        <a class="navbar-brand" id="peruuta" role="button" href="">Peruuta</a>
                     </div>
                     <div class="navbar-right">
                         <ul class="nav navbar-nav">
@@ -57,9 +58,6 @@
             <div class="col-md-6" name="sisalto" id="div_twitter">
                  <h2 class="twitter_header">Twitter</h2>
             	<div hidden role="button" type="button" id="uusia_twiitteja" href="" >New Tweets</div>
-                {% for item in tweets %}
-                <div class="tweet" tweetID="{{ item[0] }}"></div>
-                {% endfor %}
                 <div id="hae_seuraavat" role="button" type="button" href="">Hae lisää</div>
             </div>
 

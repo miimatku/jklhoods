@@ -30,14 +30,17 @@ app.add_url_rule('/realtime', methods = ['GET', 'POST'], view_func=streaminstagr
 
 @app.route('/')
 def index():
-    return render_template('index.html', tweets=twiitit.twiits(), 
-    	insta=instaposts.instagramPosts())
+    return render_template('index.html', insta=instaposts.instagramPosts())
 @app.route('/twitter')
 def twitter():
     return 'Twitter is here'
 @app.route('/about')
 def about():
     return 'The about page'    
+
+@app.route('/alustaTweets', methods = ['POST'])
+def alustaTweets():
+    return twiitit.twiits()
 
 @app.route('/hashtags',methods = ['POST'])
 def hashtags():
@@ -58,6 +61,10 @@ def haes_twitter_tagilla():
 @app.route('/fetchTweets', methods = ['POST'])
 def fetchTweets():
     return twiitit.fetchTweets(request.get_json())
+
+@app.route('/fetchTagTweets', methods = ['POST'])
+def fetchTagTweets():
+    return twiitit.fetchTagTweets(request.get_json())
 	
 @app.route('/fetchInstagram', methods = ['POST'])
 def fetchInstagram():
