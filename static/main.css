@@ -29,6 +29,40 @@ body {
   padding-bottom: 120px;
 }
 
+
+
+
+#uusia_twiitteja {
+  -moz-box-shadow:inset 0px 1px 0px 0px #9fb4f2;
+  -webkit-box-shadow:inset 0px 1px 0px 0px #9fb4f2;
+  box-shadow:inset 0px 1px 0px 0px #9fb4f2;
+  background-color:#ffffff;
+  -moz-border-radius:6px;
+  -webkit-border-radius:6px;
+  border-radius:6px;
+  border:1px solid #4e6096;
+  display:block;
+  cursor:pointer;
+  color:#332133;
+  text-align: :right;
+  font-family:Arial;
+  font-size:20px;
+  text-decoration:none;
+  text-shadow:0px 1px 0px #283966;
+  text-align: center;
+  margin-right: auto; 
+  margin-left: auto;
+  padding: 0px;
+}
+#uusia_twiitteja:hover {
+  background-color:#f0f7ff;
+}
+#uusia_twiitteja:active {
+  position:relative;
+  top:1px;
+}
+
+
   /*#tweet {
     width: 400px !important;
   }
