@@ -72,3 +72,27 @@ def fetchNext(shortcode):
 	finally:
 		if con:
 			con.close()
+
+
+def hae_tagilla(req):
+	con = None
+	tagi = req["tagi"]
+
+	try:
+		con = lite.connect('instagram.db')
+
+		post = []
+		cur = con.cursor()
+		cur.execute('SELECT instagram_posts.shortcode FROM instagram_posts, instagram_tags WHERE instagram_posts.mediaID = instagram_tags.mediaID AND instagram_tags.hashtag LIKE ? ORDER BY id DESC LIMIT 10', (str(tagi), ))
+		#filterointia varten
+		#cur.execute('SELECT tweet.id FROM twitter_tweets tweet INNER JOIN twitter_tags tag ON tweet.id = tag.id')
+		rows = cur.fetchall()
+		for row in rows:
+			post.append([str(row[0])])
+		return jsonify(result=post)
+	except lite.Error, e:
+		print "Error &s:" % e.args[0]
+		sys.exit(1)
+	finally:
+		if con:
+			con.close()
