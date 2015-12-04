@@ -20,6 +20,7 @@ con = sql3.connect("tweets.db")
 
 cur = con.cursor()
 
+
 def newTweets():
     if new == 0:
         return
@@ -47,7 +48,7 @@ class Listener(StreamListener):
         con.commit()
 
         print((id ,screen_name))
-        print tagit
+#        print tagit
         return True
 
     def on_error(self, status):
@@ -56,15 +57,17 @@ class Listener(StreamListener):
     		return False
         print status
 
-auth = OAuthHandler(ckey, csecret)
-auth.set_access_token(atoken, asecret)
+#auth = OAuthHandler(ckey, csecret)
+#auth.set_access_token(atoken, asecret)
 
-twitterStream = Stream(auth, Listener())
-twitterStream.filter(track=["#car"])
+#twitterStream = Stream(auth, Listener())
+#twitterStream.filter(track=["#car"])
 
-#def runStream():
-#    auth = OAuthHandler(ckey, csecret)
-#    auth.set_access_token(atoken, asecret)
-#    twitterStream = Stream(auth, listener())
-#    twitterStream.filter(track=["Finland"])
+def runStream():
+    auth = OAuthHandler(ckey, csecret)
+    auth.set_access_token(atoken, asecret)
+    twitterStream = Stream(auth, Listener())
+    twitterStream.filter(track=["car"])
 
+if __name__ == '__main__':
+    runStream()

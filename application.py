@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import multiprocessing
 import streaminstagram
+import streamtweet
 import time, sys
 import instaposts, twiitit, hashtags_twitter, hashtags_instagram
 
@@ -106,11 +107,13 @@ def startApp():
 
 def initializeInstagram():
     streaminstagram.startSubscription()    
-    
+
     
 if __name__ == '__main__':
    flaskapp = ApplicationProcess()
    flaskapp.start()
+   #tweetStream = multiprocessing.Process(target=streamtweet.runStream)
+   #tweetStream.start()
    #instagramSubscription = multiprocessing.Process(target=initializeInstagram)
    #instagramSubscription.start()
    
