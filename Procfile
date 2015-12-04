@@ -1,2 +1,1 @@
-web: gunicorn application:app
-worker: python streamtweet.py
+web: python application.py

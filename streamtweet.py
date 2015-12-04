@@ -67,7 +67,7 @@ def runStream():
     auth = OAuthHandler(ckey, csecret)
     auth.set_access_token(atoken, asecret)
     twitterStream = Stream(auth, Listener())
-    twitterStream.filter(track=["car"])
+    twitterStream.filter(track=["#car"])
 
 if __name__ == '__main__':
     runStream()

@@ -21,9 +21,8 @@ CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
 CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
 ACCESS_TOKEN='1442727277.5b9e1e6.71468fed77d14c4fb1d3a41b2644d4de'
 COUNT = 1
-CALLBACK_HEROKU = 'https://shielded-wave-4959.herokuapp.com/callback'
+CALLBACK_HEROKU = 'https://ssmdev-test.herokuapp.com/realtime'
 CALLBACK_LOCAL = 'http://localhost:5000/oauth_callback'
-CALLBACK_TUNNEL = 'https://nzmpqlpmhe.localtunnel.me/realtime' #lt --port 8000 --subdomain nzmpqlpmhe
 
 tag = 'car'
 subID = 0
@@ -40,7 +39,7 @@ def subscribeToTag(topic):
 	r = api.create_subscription(object = 'tag',
 	object_id = topic,
 	aspect = 'media',
-	callback_url = CALLBACK_TUNNEL,
+	callback_url = CALLBACK_HEROKU,
 	client_id = CLIENT_ID,
 	client_secret = CLIENT_SECRET)
  	global subID

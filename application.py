@@ -4,6 +4,7 @@ import streaminstagram
 import streamtweet
 import time, sys
 import instaposts, twiitit, hashtags_twitter, hashtags_instagram
+import os
 
 """
 
@@ -17,7 +18,7 @@ curl -F 'client_id=efe6cccbd3ac4e75b842c957e954c569' \
      -F 'object=tag' \
      -F 'aspect=media' \
      -F 'object_id=swag' \
-     -F 'callback_url=https://nzmpqlpmhe.localtunnel.me/realtime' \
+     -F 'callback_url=https://ssmdev-test.herokuapp.com/realtime' \
      https://api.instagram.com/v1/subscriptions/
 
 
@@ -102,7 +103,7 @@ class ApplicationProcess(multiprocessing.Process):
     
 def startApp():
     global app
-    app.run(debug=True, port=8000, use_reloader=True)
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT')), use_reloader=True)
 
 
 def initializeInstagram():
@@ -110,17 +111,18 @@ def initializeInstagram():
 
     
 if __name__ == '__main__':
-   flaskapp = ApplicationProcess()
-   flaskapp.start()
-   #tweetStream = multiprocessing.Process(target=streamtweet.runStream)
-   #tweetStream.start()
-   #instagramSubscription = multiprocessing.Process(target=initializeInstagram)
-   #instagramSubscription.start()
+    flaskapp = ApplicationProcess()
+    flaskapp.start()
+    #print(os.environ.get('PORT'))
+    #tweetStream = multiprocessing.Process(target=streamtweet.runStream)
+    #tweetStream.start()
+    instagramSubscription = multiprocessing.Process(target=initializeInstagram)
+    instagramSubscription.start()
    
-   while True:
-      try:
-        time.sleep(1)
-      except KeyboardInterrupt, SystemExit:
-        instagramSubscription.terminate()
-        flaskapp.terminate()
-        sys.exit(0)
+    while True:
+        try:
+            time.sleep(1)
+        except KeyboardInterrupt, SystemExit:
+            instagramSubscription.terminate()
+            flaskapp.terminate()
+            sys.exit(0)
