@@ -29,6 +29,15 @@ body {
   padding-bottom: 120px;
 }
 
+
+@media (max-width: 767px) {
+  .navi_text {
+    font-size: 12px;
+}}
+
+
+
+
 .update_buttons {
   -moz-box-shadow:inset 0px 1px 0px 0px #9fb4f2;
   -webkit-box-shadow:inset 0px 1px 0px 0px #9fb4f2;

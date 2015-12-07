@@ -1,11 +1,32 @@
 import sqlite3 as sql3
-from apscheduler.scheduler import Scheduler		#pip install apscheduler==2.1.2
+from apscheduler.schedulers.blocking import BlockingScheduler	#pip install apscheduler==3.0.0
 from datetime import datetime,timedelta
 import time
 import logging
-logging.basicConfig()
 
 LIMIT = 400
+
+sched = BlockingScheduler()
+
+@sched.scheduled_job('interval', days=1)
+def doCleanUp():
+	count1 = getInstagramCount()
+	count2 = getTweetsCount()
+
+	if getInstagramCount() > LIMIT:
+		deleteOldestInstagram(findInstagramThreshold())
+		if getInstagramCount() < count1:
+			print "Successfully deleted %d rows from Instagram database" % count1
+		
+	else:
+		print "No deletions were made to instagram database"
+	if getTweetsCount() > LIMIT:
+		deleteOldestTweets(findTwitterThreshold())
+		if getTweetsCount() < count2:
+			print "Successfully deleted %d rows from Twitter database" % count2
+	else:
+		print "No deletions were made to twitter database"
+	print('Database deletion process was run')
 
 
 def getInstagramCount():
@@ -52,6 +73,11 @@ def deleteOldestInstagram(week_old_id):
 	try:
 		con = sql3.connect("instagram.db")
 		cur = con.cursor()
+		cur.execute("SELECT mediaID FROM instagram_posts WHERE id < ?", (week_old_id,) )
+		rows = cur.fetchall()
+		tag_deletion = 'DELETE FROM instagram_tags WHERE mediaID IN (' + ','.join(str(r[0]) for r in rows) + ')'
+		cur.execute(tag_deletion)
+
 		cur.execute("DELETE FROM instagram_posts WHERE id < ?", (week_old_id,) )
 		con.commit()
 		con.close()
@@ -68,7 +94,6 @@ def deleteOldestTweets(week_old_id):
 		#tagien poisto
 		cur.execute("SELECT tweetID FROM twitter_tweets WHERE id < ?", (week_old_id,) )
 		rows = cur.fetchall()
-		print rows
 		tag_deletion = 'DELETE FROM twitter_tags WHERE tweetID IN (' + ','.join(str(r[0]) for r in rows) + ')'
 		cur.execute(tag_deletion)
 		#tweettien poisto
@@ -80,27 +105,19 @@ def deleteOldestTweets(week_old_id):
 		con.close()
 
 
-def startScheduler():
-	schedule = Scheduler()
-	schedule.add_interval_job(doCleanUp, days=1)
-	schedule.start()
-	print 'Scheduler has started.'
-	while True:
-		time.sleep(5)
-
-
-#etsii tietokannasta ensimmaisen rivin, joka on yli viikon vanha
-def findInstagramLimit():
+#etsii tietokannasta ensimmaisen rivin, joka on viikon vanha
+def findInstagramThreshold():
 	today = datetime.now()
 	weekAgo = today - timedelta(days=7)
 	month = weekAgo.month
 	day = weekAgo.day
-	query = '%' + str(day) + '.' + str(month) + '%'
+	query = '%' + '%02d' % day + '.' + '%02d' % month + '%'
+
 
 	try:
 		con = sql3.connect("instagram.db")
 		cur = con.cursor()
-		cur.execute("SELECT id,time FROM instagram_posts WHERE time LIKE ? ORDER BY id ASC LIMIT 1", (query,) )
+		cur.execute("SELECT id FROM instagram_posts WHERE time LIKE ? LIMIT 1", (query,) )
 		try:		
 			row = cur.fetchone()
 			con.close()
@@ -114,18 +131,17 @@ def findInstagramLimit():
 		return None
 
 
-def findTwitterLimit():	
+def findTwitterThreshold():	
 	today = datetime.now()
 	weekAgo = today - timedelta(days=7)
 	month = weekAgo.month
 	day = weekAgo.day
-	query = '%' + str(day) + '.' + str(month) + '%'
-	print query
+	query = '%' + '%02d' % day + '.' + '%02d' % month + '%'
 
 	try:
 		con = sql3.connect("tweets.db")
 		cur = con.cursor()
-		cur.execute("SELECT id,time FROM twitter_tweets WHERE time LIKE ? ORDER BY id ASC LIMIT 1", (query,) )
+		cur.execute("SELECT id FROM twitter_tweets WHERE time LIKE ? LIMIT 1", (query,) )
 		try:		
 			row = cur.fetchone()
 			con.close()
@@ -137,28 +153,6 @@ def findTwitterLimit():
 		print "Error &s:" % e.args[0]
 		con.close()
 		return None		
-		
-		
-
-def doCleanUp():
-	count1 = getInstagramCount()
-	count2 = getTweetsCount()
-
-	if getInstagramCount() > LIMIT:
-		deleteOldestInstagram(findInstagramLimit())
-		if getInstagramCount() < count1:
-			print "Successfully deleted %d rows from Instagram database" % count1
-		
-	else:
-		print "No deletions were made to instagram database"
-	if getTweetsCount() > LIMIT:
-		deleteOldestTweets(findTwitterLimit())
-		if getTweetsCount() < count2:
-			print "Successfully deleted %d rows from Twitter database" % count2
-	else:
-		print "No deletions were made to twitter database"
-
-startScheduler()
 
 
-
+sched.start()
