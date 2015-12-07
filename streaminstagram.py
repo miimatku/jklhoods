@@ -10,14 +10,6 @@ import sqlite3 as sql3
 from datetime import datetime
 import os
 
-"""
-https://api.instagram.com/v1/subscriptions?client_secret
-=bdadba8a4b274b45bdfcb306cfd6b120&client_id=efe6cccbd3ac4e75b842c957e954c569
-
-curl -X DELETE 'https://api.instagram.com/v1/subscriptions?client_secret=
-bdadba8a4b274b45bdfcb306cfd6b120&object=all&client_id=efe6cccbd3ac4e75b842c957e954c569'
-"""
-
 CLIENT_ID= 'INST_CLIENTID' in os.environ
 CLIENT_SECRET= 'INST_SECRET' in os.environ
 ACCESS_TOKEN= 'INST_TOKEN' in os.environ
