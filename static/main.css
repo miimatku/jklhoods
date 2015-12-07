@@ -30,6 +30,12 @@ body {
 }
 
 
+@media (max-width: 767px) {
+  .navi_text {
+    font-size: 12px;
+  }
+}
+
 
 
 #uusia_twiitteja {

@@ -25,11 +25,11 @@ function alustus() {
     });
     $("#hae_seuraavat").click(haeSeuraavat);
 	$("#hae_seuraavat_instagram").click(haeSeuraavat_instagram);
-    $("#peruuta").click(peruutaTagit);
+    //$("#peruuta").click(peruutaTagit);
 }
 
-function peruutaTagit(e) {
-    e.preventDefault();
+
+function peruuta_tagit_twitter() {
     $("#hae_seuraavat").off("click");
     $("#hae_seuraavat").click(haeSeuraavat);
     $(".tweet").remove();
@@ -39,6 +39,11 @@ function peruutaTagit(e) {
         $(this).hide();
         fetchTweets(true);
     });
+}
+
+
+function peruuta_tagit_instagram() {
+    //
 }
 
 function alustaTwiitit() {
