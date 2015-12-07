@@ -32,10 +32,12 @@ app.add_url_rule('/realtime', methods = ['GET', 'POST'], view_func=streaminstagr
 
 @app.route('/')
 def index():
-    return render_template('index.html', insta=instaposts.instagramPosts())
+    return render_template('index.html')
+
 @app.route('/twitter')
 def twitter():
     return 'Twitter is here'
+
 @app.route('/about')
 def about():
     return 'The about page'    
@@ -43,6 +45,10 @@ def about():
 @app.route('/alustaTweets', methods = ['POST'])
 def alustaTweets():
     return twiitit.twiits()
+
+@app.route('/alustaInstagrams', methods = ['POST'])
+def alustaInstagrams():
+	return instaposts.instagramPosts()
 
 @app.route('/hashtags',methods = ['POST'])
 def hashtags():
@@ -60,6 +66,10 @@ def hae_twitter_tagilla():
 def hae_instagram_tagilla():
     return instaposts.hae_tagilla(request.get_json())
 
+@app.route('/haes_instagram_tagilla', methods = ['POST'])
+def haes_instagram_tagilla():
+	return instaposts.haes_tagilla(request.get_json())
+
 @app.route('/haes_twitter_tagilla',methods = ['POST'])
 def haes_twitter_tagilla():
     return twiitit.haes_tagilla(request.get_json())
@@ -71,13 +81,17 @@ def fetchTweets():
 @app.route('/fetchTagTweets', methods = ['POST'])
 def fetchTagTweets():
     return twiitit.fetchTagTweets(request.get_json())
+
+@app.route('/fetchTagInstagram', methods = ['POST'])
+def fetchTagInstagram():
+	return instaposts.fetchTagInstagram(request.get_json())
 	
 @app.route('/fetchInstagram', methods = ['POST'])
 def fetchInstagram():
     return instaposts.fetchInstagram(request.get_json())
 
-@app.route('/haeSeuraavat', methods = ['POST'])
-def haeSeuraavat():
+@app.route('/haeSeuraavat_tweet', methods = ['POST'])
+def haeSeuraavat_tweet():
     return twiitit.haeSeuraavat(request.get_json())
 	
 @app.route('/haeSeuraavat_instagram', methods = ['POST'])
@@ -117,8 +131,8 @@ if __name__ == '__main__':
     #print(os.environ.get('PORT'))
     #tweetStream = multiprocessing.Process(target=streamtweet.runStream)
     #tweetStream.start()
-    instagramSubscription = multiprocessing.Process(target=initializeInstagram)
-    instagramSubscription.start()
+    #instagramSubscription = multiprocessing.Process(target=initializeInstagram)
+    #instagramSubscription.start()
    
     while True:
         try:

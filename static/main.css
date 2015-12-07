@@ -29,10 +29,7 @@ body {
   padding-bottom: 120px;
 }
 
-
-
-
-#uusia_twiitteja {
+.update_buttons {
   -moz-box-shadow:inset 0px 1px 0px 0px #9fb4f2;
   -webkit-box-shadow:inset 0px 1px 0px 0px #9fb4f2;
   box-shadow:inset 0px 1px 0px 0px #9fb4f2;
@@ -41,7 +38,6 @@ body {
   -webkit-border-radius:6px;
   border-radius:6px;
   border:1px solid #4e6096;
-  display:block;
   cursor:pointer;
   color:#332133;
   text-align: :right;
@@ -54,10 +50,12 @@ body {
   margin-left: auto;
   padding: 0px;
 }
-#uusia_twiitteja:hover {
+
+.update_buttons:hover {
   background-color:#f0f7ff;
 }
-#uusia_twiitteja:active {
+
+.update_buttons:active {
   position:relative;
   top:1px;
 }

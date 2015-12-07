@@ -34,8 +34,6 @@ def hae_tagilla(req):
 		tweets = []
 		cur = con.cursor()
 		cur.execute('SELECT twitter_tweets.tweetID FROM twitter_tweets, twitter_tags WHERE twitter_tweets.tweetID = twitter_tags.tweetID AND twitter_tags.hashtag LIKE ? ORDER BY id DESC LIMIT 10', (str(tagi), ))
-		#filterointia varten
-		#cur.execute('SELECT tweet.id FROM twitter_tweets tweet INNER JOIN twitter_tags tag ON tweet.id = tag.id')
 		rows = cur.fetchall()
 		for row in rows:
 			tweets.append([str(row[0])])
@@ -58,8 +56,6 @@ def haes_tagilla(req):
 		tweets = []
 		cur = con.cursor()
 		cur.execute('SELECT twitter_tweets.tweetID FROM twitter_tweets, twitter_tags WHERE twitter_tweets.tweetID = twitter_tags.tweetID AND twitter_tags.hashtag LIKE ? AND twitter_tweets.tweetID < ? ORDER BY id DESC LIMIT 10', (str(tagi),tweetId))
-		#filterointia varten
-		#cur.execute('SELECT tweet.id FROM twitter_tweets tweet INNER JOIN twitter_tags tag ON tweet.id = tag.id')
 		rows = cur.fetchall()
 		for row in rows:
 			tweets.append([str(row[0])])
