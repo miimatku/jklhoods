@@ -6,13 +6,14 @@ import time
 import json
 import time
 from datetime import datetime
+import os
 #import sys
 
 #consumer key, consumer secret, access token, access secret.
-ckey="kwZuZArqeNhEtP5iFZLbA4tGq"
-csecret="AxHMUj8Am1Z0bTrjg7OlZmIW6S1iCCbCGJj7esvNwsWOkFCxVM"
-atoken="3869893516-1jWdaC3do0Dvhyb8TP8C6bvaYPRBMt28ug4aoDW"
-asecret="IbEu7Q0an9E3T3wzzrYCIRKqy9T370Xnz4HdHFTcrEfWI"
+ckey= 'TWITTER_CKEY' in os.environ
+csecret= 'TWITTER_CSECRET' in os.environ
+atoken= 'TWITTER_TOKEN'in os.environ 
+asecret= 'TWITTER_SECRET' in os.environ
 
 new = 0
 

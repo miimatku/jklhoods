@@ -8,32 +8,20 @@ import time
 import multiprocessing
 import sqlite3 as sql3
 from datetime import datetime
+import os
 
-"""
-https://api.instagram.com/v1/subscriptions?client_secret
-=bdadba8a4b274b45bdfcb306cfd6b120&client_id=efe6cccbd3ac4e75b842c957e954c569
-
-curl -X DELETE 'https://api.instagram.com/v1/subscriptions?client_secret=
-bdadba8a4b274b45bdfcb306cfd6b120&object=all&client_id=efe6cccbd3ac4e75b842c957e954c569'
-"""
-
-CLIENT_ID='efe6cccbd3ac4e75b842c957e954c569'
-CLIENT_SECRET='bdadba8a4b274b45bdfcb306cfd6b120'
-ACCESS_TOKEN='1442727277.5b9e1e6.71468fed77d14c4fb1d3a41b2644d4de'
+CLIENT_ID= 'INST_CLIENTID' in os.environ
+CLIENT_SECRET= 'INST_SECRET' in os.environ
+ACCESS_TOKEN= 'INST_TOKEN' in os.environ
 COUNT = 1
-CALLBACK_HEROKU = 'https://ssmdev-test.herokuapp.com/realtime'
-CALLBACK_LOCAL = 'http://localhost:5000/oauth_callback'
+CALLBACK_HEROKU = 'https://jklhoods.herokuapp.com/callback'
+#CALLBACK_LOCAL = 'http://localhost:5000/oauth_callback'
+#CALLBACK_TUNNEL = 'https://nzmpqlpmhe.localtunnel.me/realtime' #lt --port 8000 --subdomain nzmpqlpmhe
 
 tag = 'car'
 subID = 0
-
 reactor = None
-"""
-TODO:
-subscription poistaminen suljettaessa ohjelma
-multiprocessingin aiheuttamat virheet pois
 
-"""
 
 def subscribeToTag(topic):
 	r = api.create_subscription(object = 'tag',
