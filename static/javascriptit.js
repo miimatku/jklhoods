@@ -97,15 +97,21 @@ function instagram_top_hastags(e) {
 
 
 
-
-
 // =================================================================
 // Instagram funktiot ==============================================
 // =================================================================
 
 
 function peruuta_tagit_instagram() {
-    //
+    $("#hae_seuraavat_instagram").off("click");
+    $("#hae_seuraavat_instagram").click(haeSeuraavat_instagram);
+    $(".instapost").remove();
+    alustaInstagramit();
+    $("#uusia_posteja").off("click");
+    $("#uusia_posteja").click(function() {
+        $(this).hide();
+        fetchTweets(true);
+    });
 }
 
 function alustaInstagramit() {
@@ -256,11 +262,12 @@ function haeTagillaInsta(tagi) {
                 $(this).hide();
                 fetchTagInstagram(true, tagi);
             });
-            $("hae_seuraavat_instagram").off('click');
-            $("hae_seuraavat_instagram").click( function(){ haeSeuraavatTagilla_instagram(tagi); });
+            $("#hae_seuraavat_instagram").off('click');
+            $("#hae_seuraavat_instagram").click( function(){ haeSeuraavatTagilla_instagram(tagi); });
         }
     });
 }
+
 
 function haeSeuraavatTagilla_instagram(tagi){
     var data = $(".instapost:last")[0].getAttribute("instacode");
@@ -269,7 +276,7 @@ function haeSeuraavatTagilla_instagram(tagi){
         method: "POST",
         url: '/haes_instagram_tagilla',
         contentType: 'application/json',
-        data: JSON.stringify(String(data)),
+        data: JSON.stringify(send),
         dataType: "json",
         success: function(data) {
             var count = data['result'].length;

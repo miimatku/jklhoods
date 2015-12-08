@@ -106,9 +106,10 @@ def hae_tagilla(req):
 			con.close()
 
 def haes_tagilla(req):
+	print req
 	con = None
 	tagi = req["tagi"]
-	shortcode = req["shortcode"]
+	shortcode = req["instacode"]
 	try:
 		con = lite.connect('instagram.db')
 		posts = []
